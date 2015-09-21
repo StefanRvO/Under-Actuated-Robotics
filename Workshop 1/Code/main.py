@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from PendulumWithMovingMass import PendulumWithMovingMass
 from DrawPendulumWithMovingMass import DrawPendulum
 import numpy as np

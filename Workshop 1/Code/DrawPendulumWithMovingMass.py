@@ -9,7 +9,7 @@ class DrawPendulum:
 		self.P = Pendulum
 
 		#setup matplotlib stuff
-		self.fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+		self.fig = plt.figure(num=None, figsize=(8, 7), dpi=80, facecolor='w', edgecolor='k')
 		self.ax = plt.axes(xlim=(-self.P.L_1 * 1.2, self.P.L_1 * 1.2), ylim =(-self.P.L_1 * 1.2, self.P.L_1 * 1.2))
 		self.rod, = self.ax.plot([], [], 'o-', lw=2)
 		self.sleeve = plt.Circle((self.P.L_1 * 10000, self.P.L_1 * 10000), 0.05, fc='g') #create Off-screen, as we need to initialize for blitting

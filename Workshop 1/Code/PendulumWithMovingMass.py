@@ -31,7 +31,7 @@ class PendulumWithMovingMass:
 		self.M_2 = M_2
 		self.g = g
 		self.I_zz1 = M_1 * L_1 * L_1 / 3. #Rod rotating around the end
-		self.I_zz2 = M_2 / 2 * L_2/2 * L_2/2  #pointmass around point
+		self.I_zz2 = 0.5 *(self.M_2 * ( self.L_2 ** 2)) / 12  #Inertia af sleeve
 		self.angle = start_angle
 		self.x1 = start_x1
 		self.timestep = timestep
