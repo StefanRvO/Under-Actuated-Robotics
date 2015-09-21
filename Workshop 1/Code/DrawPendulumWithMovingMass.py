@@ -2,7 +2,6 @@ from PendulumWithMovingMass import PendulumWithMovingMass
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
-import time
 
 class DrawPendulum:
 	def __init__(self,Pendulum):
