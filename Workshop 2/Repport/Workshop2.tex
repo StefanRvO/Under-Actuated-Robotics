@@ -1,0 +1,79 @@
+\documentclass[a4paper,12pt,english]{article}
+\usepackage[a4paper]{geometry}
+\usepackage[english]{babel}
+\usepackage{verbatim}
+\usepackage{minted}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{ mathrsfs }
+ \usepackage{amsmath} \title{\textbf{Under Actuated Robotics - Workshop 2}}
+\author{Stefan Ravn van Overeem – stvan13@student.sdu.dk}
+
+\begin{document}
+\maketitle
+\newpage
+
+\section{Derivation of State Space Representation}
+The equations of motion for the pendulum can be expressed as:
+$$m \cdot  l^2  \cdot \ddot{\theta} + b  \cdot \dot{\theta} + m  \cdot g  \cdot l  \cdot sin(\theta) = u$$
+
+We assume small angle, and thus get
+$$m \cdot  l^2  \cdot \ddot{\theta} + b  \cdot \dot{\theta} + m  \cdot g  \cdot l  \cdot \theta = u$$
+
+
+We write $\ddot{\theta}$ as $\dot{x_2}$,
+$\dot{\theta}$ as $x_2$
+and $\theta$ as $x_1$
+
+Thus we can write
+
+$$\dot{x_1} = x_2$$
+$$\dot{x_2} = -\frac{g}{l} \cdot x_1 - \frac{b}{m \cdot l^2} \cdot x_2 + \frac{u}{m \cdot l^2}$$
+
+We can thus write the state space equation
+$$\dot{x} = A \cdot x + B \cdot u$$
+
+$$
+\begin{bmatrix}
+\dot{x_1} \\
+\dot{x_2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	0 & 1 \\
+	-\frac{g}{l} & -\frac{b}{m \cdot l^2}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\
+\frac{1}{m \cdot l^2}
+\end{bmatrix}
+\cdot u
+$$
+
+Thus we get
+$
+A = \begin{bmatrix}
+	0 & 1 \\
+	-\frac{g}{l} & -\frac{b}{m \cdot l^2}
+\end{bmatrix}
+$
+and
+$
+B = \begin{bmatrix}
+0 \\
+\frac{1}{m \cdot l^2}
+\end{bmatrix}
+$
+
+To get the output to equal our state, we set the C matrix to the identity matrix, and the D matrix to 0.
+
+
+\end{document}
