@@ -75,5 +75,16 @@ $
 
 To get the output to equal our state, we set the C matrix to the identity matrix, and the D matrix to 0.
 
+We control the input signal U using a fullstate feedback controller, of the form 
+$u = -K \cdot x$
+, where K is a matrix
+$$
+K = \begin{bmatrix}
+K_1 & K_2
+\end{bmatrix}
+$$
+$K_1$ and $K_2$ is determined using LQR.
+
+This is done in python and can be seen in SimplePendulumController.py
 
 \end{document}
