@@ -10,7 +10,8 @@ class SimplePendulumController:
 		self.outmax = outmax
 		self.outmin = outmin
 	def calcControlSignal(self, x, x_d):
-		output = (x_d - x) * self.K
+		output = -np.dot(self.K, (x - x_d))
+		print(output)
 		output = output[0][0]
 		if not (self.outmax == None):
 			if output > self.outmax:
