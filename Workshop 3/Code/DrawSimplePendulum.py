@@ -3,9 +3,10 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 class DrawPendulum:
-	def __init__(self,Pendulum, Controller):
+	def __init__(self,Pendulum, Controller, Graph):
 		self.P = Pendulum
 		self.C = Controller
+		self.G = Graph
 		self.lastout = np.array([ [self.P.angle], [self.P.angle_speed] ])
 
 		#setup matplotlib stuff
@@ -23,14 +24,15 @@ class DrawPendulum:
 
 	#animation function
 	def animate(self, i):
+		self.G.recordDataPoint(self.lastout)
 		control = self.C.calcControlSignal(self.lastout)
 		self.lastout = self.P.doStep(control)
-		#print(self.P.angle_speed)
-		self.rod.set_data([0, self.P.l * np.cos(self.P.angle + np.pi / 2)], [0, self.P.l * np.sin(self.P.angle + np.pi / 2)])
-		self.end_dot.center = (self.P.l * np.cos(self.P.angle + np.pi / 2), self.P.l * np.sin(self.P.angle + np.pi / 2))
+		self.G.recordControlSignal(control)
+		self.rod.set_data([0, self.P.l * np.cos(self.P.angle - np.pi / 2)], [0, self.P.l * np.sin(self.P.angle - np.pi / 2)])
+		self.end_dot.center = (self.P.l * np.cos(self.P.angle - np.pi / 2), self.P.l * np.sin(self.P.angle - np.pi / 2))
 		return self.rod, self.end_dot,
 
 	#begin the animation
-	def startAnimation(self):
-		self.anim = animation.FuncAnimation(self.fig, self.animate, init_func = self.init, frames = 60, interval = 1000 * self.P.timestep, blit=True)
+	def startAnimation(self, speedup = 1):
+		self.anim = animation.FuncAnimation(self.fig, self.animate, init_func = self.init, frames = 60, interval = (1000. * self.P.timestep) / speedup, blit=True)
 		plt.show()
