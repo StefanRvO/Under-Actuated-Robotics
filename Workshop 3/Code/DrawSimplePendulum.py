@@ -34,5 +34,6 @@ class DrawPendulum:
 
 	#begin the animation
 	def startAnimation(self, speedup = 1):
-		self.anim = animation.FuncAnimation(self.fig, self.animate, init_func = self.init, frames = 60, interval = (1000. * self.P.timestep) / speedup, blit=True)
+		anim = animation.FuncAnimation(self.fig, self.animate, init_func = self.init, frames = 60, interval = (1000. * self.P.timestep) / speedup, blit=True)
 		plt.show()
+

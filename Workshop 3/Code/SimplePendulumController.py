@@ -13,7 +13,7 @@ def fixify_angle(angle, fixpoint):
 
 class SimplePendulumController:
 
-	def __init__(self, Plant, K_LQR, K_SU, setpoint, outmax = None, outmin = None): #K is a np matrix
+	def __init__(self, Plant, K_LQR, K_SU, setpoint, outmax = None, outmin = None, SwingupLimit = np.radians(5)): #K is a np matrix
 		self.outmax = outmax
 		self.outmin = outmin
 		self.P = Plant
@@ -21,6 +21,7 @@ class SimplePendulumController:
 		self.K_SU = K_SU
 		self.x_d = setpoint
 		self.P.angle_setpoint = setpoint[0][0]
+		self.SwingupLimit = SwingupLimit
 
 	def PendulumEnergy(self, state):
 		energy = self.P.m * self.P.l * self.P.g * (1 + np.cos(state[0][0] + np.pi))#positional energy
@@ -30,6 +31,7 @@ class SimplePendulumController:
 	def SwingUpController(self, x, setpoint):
 		desiredEnergy = self.PendulumEnergy(setpoint)
 		currentEnergy = self.PendulumEnergy(x)
+		print(currentEnergy)
 		delta_energy = currentEnergy - desiredEnergy
 		out = [[-self.K_SU * x[1][0] * delta_energy]]
 		return out
@@ -38,7 +40,7 @@ class SimplePendulumController:
 		return -np.dot(self.K_LQR, (x - setpoint))
 
 	def LTIController(self, x, setpoint):
-		if( abs(x[0][0] - setpoint[0][0]) < np.radians(.5)):
+		if( abs(x[0][0] - setpoint[0][0]) < self.SwingupLimit):
 			return self.TopController(x, setpoint)
 		else:
 			return self.SwingUpController(x, setpoint)
@@ -52,9 +54,9 @@ class SimplePendulumController:
 
 	def calcControlSignal(self, x):
 		x[0][0] = fixify_angle(x[0][0], self.x_d[0][0])
-		print(x[0][0])
+		#print(x[0][0])
 		output = self.LTIController(x, self.x_d)
-		output = self.FeedBackCompensator(x, output)
+		#output = self.FeedBackCompensator(x, output)
 		output = self.OutputLimiter(output)
 		return self.OutputLimiter(output)
 
