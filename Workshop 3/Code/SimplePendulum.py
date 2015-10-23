@@ -24,9 +24,9 @@ class SimplePendulum:
              + self.b * angle_speed - control[0][0]
         denom = self.m * (self.l ** 2)
         return - (num / denom)
-    def doStep(self, control_input = np.array([[0]])): #control input is a scalar
-    
-        #progress one step using Runge-Kutta method
+
+    def Runge_Kutta(self, control_input):
+	#progress one step using Runge-Kutta method
         ku1 = self.angle_speed_deriv(self.angle, self.angle_speed, control_input)
         kt1 = self.angle_deriv(self.angle_speed)
         ku2 = self.angle_speed_deriv(self.angle + kt1 * self.timestep * 0.5, self.angle_speed + ku1 * self.timestep * 0.5, control_input)
@@ -40,6 +40,20 @@ class SimplePendulum:
         self.angle_speed = self.angle_speed + (self.timestep / 6) * (ku1 + ku2 * 2 + ku3 * 2 + ku4)
         #calculate new angle
         self.angle = self.angle + (self.timestep / 6) * (kt1 + kt2 * 2 + kt3 * 2 + kt4)
+
+    def Euler(self, control_input):
+	#progress one step using Euler method
+        ku1 = self.angle_speed_deriv(self.angle, self.angle_speed, control_input)
+        #calculate new angle speed
+        self.angle_speed = self.angle_speed + self.timestep * ku1
+        kt1 = self.angle_deriv(self.angle_speed)
+        #calculate new angle
+        self.angle = self.angle + self.timestep * kt1
+
+    def doStep(self, control_input = np.array([[0]])): #control input is a scalar
+    	#Do progression
+        self.Euler(control_input)
+
         #returns a np matrix of size 2 x 1
         output = np.array([ [self.angle], [self.angle_speed] ])
         #apply noise to the output
@@ -47,7 +61,7 @@ class SimplePendulum:
         return output
 
     def outputNoisyfier(self, clean_out):
-        if(self.noise == None):
+        if(self.noise is None):
             return clean_out
         
         dirty = np.dot(self.noise, random.uniform(-0.5, 0.5))    

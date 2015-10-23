@@ -26,7 +26,7 @@ class SimplePendulumController:
 	def SwingUpController(self, x, setpoint):
 		desiredEnergy = self.PendulumEnergy(setpoint)
 		currentEnergy = self.PendulumEnergy(x)
-		print(currentEnergy)
+		#print(currentEnergy)
 		delta_energy = currentEnergy - desiredEnergy
 		out = [[-self.K_SU * x[1][0] * delta_energy]]
 		return out

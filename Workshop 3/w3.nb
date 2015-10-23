@@ -1,0 +1,628 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     21299,        619]
+NotebookOptionsPosition[     19376,        550]
+NotebookOutlinePosition[     19711,        565]
+CellTagsIndexPosition[     19668,        562]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["Create Affine Statespace model", "Text",
+ CellChangeTimes->{{3.6532820048636303`*^9, 3.6532820117321672`*^9}, 
+   3.653282064882321*^9, 3.6544918900897284`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"m", " ", "=", "1"}], ";", " ", 
+  RowBox[{"l", " ", "=", "1"}], ";", " ", 
+  RowBox[{"b", "=", " ", "0"}], ";", " ", 
+  RowBox[{"g", "=", "9.82"}], ";"}]], "Input",
+ CellChangeTimes->{{3.653282663067471*^9, 3.653282695072001*^9}, 
+   3.654491931733658*^9, {3.654530375249875*^9, 3.654530375510919*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"equ", " ", "=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"m", " ", "*", " ", 
+     RowBox[{"l", "^", "2"}], "*", 
+     RowBox[{
+      RowBox[{"\[Theta]", "''"}], "[", "t", "]"}]}], "+", 
+    RowBox[{"b", "*", 
+     RowBox[{
+      RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}], "+", 
+    RowBox[{"m", "*", "g", "*", "l", "*", 
+     RowBox[{"Sin", "[", 
+      RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}]}], "\[Equal]", 
+   RowBox[{"u", "[", "t", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.653282071815465*^9, 3.653282142942471*^9}, {
+  3.653282207937298*^9, 3.653282208337944*^9}, {3.653284128451125*^9, 
+  3.653284128751486*^9}, {3.6545294571764936`*^9, 3.6545294573613462`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"9.82`", " ", 
+    RowBox[{"Sin", "[", 
+     RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}], "+", 
+   RowBox[{
+    SuperscriptBox["\[Theta]", "\[Prime]\[Prime]",
+     MultilineFunction->None], "[", "t", "]"}]}], "\[Equal]", 
+  RowBox[{"u", "[", "t", "]"}]}]], "Output",
+ CellChangeTimes->{{3.65453015265639*^9, 3.654530179389349*^9}, 
+   3.6545303781806717`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"assm", " ", "=", " ", 
+  RowBox[{"AffineStateSpaceModel", "[", 
+   RowBox[{"equ", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\[Theta]", "[", "t", "]"}], ",", " ", 
+      RowBox[{
+       RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}], "}"}], ",", 
+    RowBox[{"u", "[", "t", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\[Theta]", "[", "t", "]"}], ",", " ", 
+      RowBox[{
+       RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}], "}"}], ",", " ", "t"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.653282149096058*^9, 3.653282222170165*^9}, {
+  3.653282291969412*^9, 3.653282305203938*^9}, {3.653282350522718*^9, 
+  3.653282352484667*^9}, {3.6532841317717667`*^9, 3.6532841799563704`*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{RowBox[{
+     SubscriptBox["\[FormalX]", "2"], "[", "t", "]"}],RowBox[{
+     RowBox[{"-", "9.82`"}], " ", 
+     RowBox[{"Sin", "[", 
+       RowBox[{
+         SubscriptBox["\[FormalX]", "1"], "[", "t", "]"}], "]"}]}],"0","1",
+   RowBox[{
+     SubscriptBox["\[FormalX]", "1"], "[", "t", "]"}],RowBox[{
+     SubscriptBox["\[FormalX]", "2"], "[", "t", "]"}],"0","0",RowBox[{
+     SubscriptBox["\[FormalX]", "1"], "[", "t", "]"}],RowBox[{
+     SubscriptBox["\[FormalX]", "2"], "[", "t", "]"}],InterpretationBox[
+   "", Automatic],InterpretationBox["", Automatic],InterpretationBox[
+   " ", None],{2, 1, 2, 2, {2, 1}, None, False, False, False, False, 
+    RowBox[{"{", 
+      RowBox[{"{", 
+        RowBox[{
+          RowBox[{"u", "[", "t", "]"}], ",", "0"}], "}"}], "}"}], "t"},{}},
+  "AffineStateSpaceModelFull",
+  BaseStyle->{NumberMarks -> False},
+  DisplayFunction->(TagBox[
+    GridBox[{{
+       SubsuperscriptBox[
+        RowBox[{"(", 
+          
+          GridBox[{{#9, #, #3}, {#10, #2, #4}, {#11, #5, #7}, {#12, #6, #8}}, 
+           GridBoxDividers -> {"Rows" -> {False, False, 
+               Directive[
+                GrayLevel[0], 
+                GrayLevel[0.6]], False}, "ColumnsIndexed" -> {2 -> Directive[
+                 GrayLevel[0], 
+                 GrayLevel[0.6]], 3 -> Directive[
+                 GrayLevel[0], 
+                 GrayLevel[0.6]]}}, 
+           GridBoxItemSize -> {
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+           GridBoxItemStyle -> {"Columns" -> {
+               Directive["InlineText", Smaller, 
+                GrayLevel[0.5]], {Automatic}}, "Rows" -> {{Automatic}}}, 
+           GridBoxBackground -> {"Rows" -> {{
+                GrayLevel[1], 
+                RGBColor[0.8, 0.9, 0.9]}}}], ")"}], #13, 
+        ButtonBox[
+         GraphicsBox[{
+           RGBColor[0.8, 0.85, 0.85], 
+           EdgeForm[
+            RGBColor[0.6, 0.7, 0.7]], 
+           RectangleBox[{0, 0}, RoundingRadius -> Offset[2.5]], 
+           InsetBox[
+            StyleBox[
+            "\[ScriptCapitalA]", Control`NonlinearModelsDump`LineColor -> 
+             GrayLevel[0], Control`NonlinearModelsDump`FrontFaceColor -> 
+             GrayLevel[0], Control`NonlinearModelsDump`BackFaceColor -> 
+             GrayLevel[0], GraphicsColor -> GrayLevel[0], FontSize -> 12, 
+             FontColor -> GrayLevel[0]], {0.5, 0.5}]}, ImageSize -> 20], 
+         ButtonFunction :> Control`Typesetting`SystemsModelTypesetToggle[
+           ButtonNotebook[], FE`CMObj], Evaluator -> Automatic, Appearance -> 
+         None]]}}], 
+    EventHandlerTag[{"MouseEntered" :> {FE`CMObj = MathLink`CallFrontEnd[
+          FrontEnd`Value[
+           FEPrivate`Self[]]]}, PassEventsDown -> True, PassEventsUp -> 
+      True}]]& ),
+  InterpretationFunction->(RowBox[{"AffineStateSpaceModel[", "{", "{", 
+     TemplateSlotSequence[{1, 2}, ","], "}", ",", "{{", 
+     TemplateSlotSequence[{3, 3}, ","], "},", "{", 
+     TemplateSlotSequence[{4, 4}, ","], "}}", ",", "{", 
+     TemplateSlotSequence[{5, 6}, ","], "}", ",", "{{", 
+     TemplateSlotSequence[{7, 7}, ","], "},", "{", 
+     TemplateSlotSequence[{8, 8}, ","], "}}", "}", ",", "{", 
+     TemplateSlotSequence[{9, 10}, ","], "}", ",", 
+     RowBox[{"{", 
+       RowBox[{"{", 
+         RowBox[{
+           RowBox[{"u", "[", "t", "]"}], ",", "0"}], "}"}], "}"}], ",", "{", 
+     TemplateSlotSequence[{11, 12}, ","], "}", ",", "t", 
+     ", SamplingPeriod -> ", #13, "]"}]& ),
+  Tooltip->AffineStateSpaceModel]], "Output",
+ CellChangeTimes->{
+  3.6532841803482*^9, 3.6544919350388823`*^9, 3.654491980565997*^9, {
+   3.654530152785348*^9, 3.654530179569832*^9}, 3.654530378284951*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"F", " ", "=", 
+   RowBox[{"FeedbackLinearize", "[", "assm", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.653282345263403*^9, 3.6532823675437107`*^9}, 
+   3.653284167579121*^9, {3.654492143857429*^9, 3.6544921452573977`*^9}}],
+
+Cell["Compute the feedbackcompensator", "Text",
+ CellChangeTimes->{{3.654492151182753*^9, 3.654492181232009*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"F", "[", "\"\<FeedbackCompensator\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.653282936344783*^9, 3.653282947926388*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{RowBox[{
+     RowBox[{"-", "1.`"}], " ", 
+     RowBox[{"(", 
+       RowBox[{
+         RowBox[{
+           RowBox[{"-", "9.82`"}], " ", 
+           RowBox[{"Sin", "[", 
+             RowBox[{
+               SubscriptBox["\[FormalX]", "1"], "[", "t", "]"}], "]"}]}], "-", 
+         RowBox[{"1.`", " ", 
+           RowBox[{
+             SubscriptBox["\[FormalU]", "1"], "[", "t", "]"}]}]}], ")"}]}],
+   RowBox[{"u", "[", "t", "]"}],InterpretationBox[" ", None],{
+   0, 1, 1, 1, None, None, False, False, False, 
+    RowBox[{"{", 
+      RowBox[{
+        SubscriptBox["\[FormalU]", "1"], "[", "t", "]"}], "}"}], 
+    "Automatic"},{}},
+  "NonlinearStateSpaceModelFull",
+  BaseStyle->{NumberMarks -> False},
+  DisplayFunction->(TagBox[
+    SubsuperscriptBox[
+     RowBox[{"(", 
+       GridBox[{{#}}, {}, 
+        GridBoxDividers -> {"Rows" -> False, "Columns" -> False}, 
+        GridBoxItemSize -> {
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+        GridBoxItemStyle -> {
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+        GridBoxBackground -> {"Rows" -> {{
+             GrayLevel[1], 
+             RGBColor[0.8, 0.9, 0.9]}}}], ")"}], #3, 
+     ButtonBox[
+      GraphicsBox[{
+        RGBColor[0.8, 0.85, 0.85], 
+        EdgeForm[
+         RGBColor[0.6, 0.7, 0.7]], 
+        RectangleBox[{0, 0}, RoundingRadius -> Offset[2.5]], 
+        InsetBox[
+         StyleBox[
+         "\[ScriptCapitalN]", Control`NonlinearModelsDump`LineColor -> 
+          GrayLevel[0], Control`NonlinearModelsDump`FrontFaceColor -> 
+          GrayLevel[0], Control`NonlinearModelsDump`BackFaceColor -> 
+          GrayLevel[0], GraphicsColor -> GrayLevel[0], FontSize -> 12, 
+          FontColor -> GrayLevel[0]], {0.5, 0.5}]}, ImageSize -> 20], 
+      ButtonFunction :> Control`Typesetting`SystemsModelTypesetToggle[
+        ButtonNotebook[], FE`CMObj], Evaluator -> Automatic, Appearance -> 
+      None]], 
+    EventHandlerTag[{"MouseEntered" :> {FE`CMObj = MathLink`CallFrontEnd[
+          FrontEnd`Value[
+           FEPrivate`Self[]]]}, PassEventsDown -> True, PassEventsUp -> 
+      True}]]& ),
+  InterpretationFunction->(
+   RowBox[{"NonlinearStateSpaceModel[", "{", "{", "}", ",", "{", 
+     TemplateSlotSequence[{1, 1}, ","], "}", "}", ",", "{", "}", ",", 
+     RowBox[{"{", 
+       RowBox[{
+         SubscriptBox["\[FormalU]", "1"], "[", "t", "]"}], "}"}], ",", "{", 
+     TemplateSlotSequence[{2, 2}, ","], "}", ",", "Automatic", 
+     ", SamplingPeriod -> ", #3, "]"}]& ),
+  Tooltip->NonlinearStateSpaceModel]], "Output",
+ CellChangeTimes->{{3.653282948463622*^9, 3.653282971473339*^9}, 
+   3.6532841697933064`*^9, 3.654491938802167*^9, 3.654491986061281*^9, {
+   3.654530152976499*^9, 3.654530179754117*^9}, 3.654530378419552*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"q", "=", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"20000", "0"},
+       {"0", "100"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], ";", 
+  RowBox[{"r", "=", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6532846799799023`*^9, 3.6532846897928143`*^9}, {
+  3.653284737334179*^9, 3.65328473749879*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"LQRegulatorGains", "[", 
+  RowBox[{"assm", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"q", ",", "r"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.653284705977448*^9, 3.653284718178759*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"131.9418862741356`", " ", 
+    RowBox[{
+     SubscriptBox["\[FormalX]", "1"], "[", "t", "]"}]}], "+", 
+   RowBox[{"19.07573779826832`", " ", 
+    RowBox[{
+     SubscriptBox["\[FormalX]", "2"], "[", "t", "]"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.65328471909895*^9, 3.6532847274992228`*^9}, 
+   3.654491966517869*^9, {3.6545301531097403`*^9, 3.654530179879757*^9}, 
+   3.6545303784899178`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["Swingupcontroller",
+  FontWeight->"Bold"],
+ "\nPositional energy in the system (with reference at angle 0):"
+}], "Text",
+ CellChangeTimes->{{3.6544921897287807`*^9, 3.654492212706852*^9}, {
+  3.654492443626422*^9, 3.65449246154662*^9}, {3.654527850783985*^9, 
+  3.6545278524633493`*^9}, {3.654528012822337*^9, 3.654528033181922*^9}, {
+  3.6545285332758102`*^9, 3.6545285797079*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"posE", " ", "=", " ", 
+  RowBox[{"m", " ", "*", " ", "l", " ", "*", " ", "g", " ", "*", " ", 
+   RowBox[{"(", 
+    RowBox[{"-", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"\[Theta]", "[", "t", "]"}], " ", "]"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.654528035539592*^9, 3.65452807557059*^9}, {
+  3.654528537465475*^9, 3.654528539780715*^9}, {3.654528592662797*^9, 
+  3.654528603311829*^9}, {3.654529196023059*^9, 3.654529202544347*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "9.82`"}], " ", 
+  RowBox[{"Cos", "[", 
+   RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}]], "Output",
+ CellChangeTimes->{
+  3.6545286053744392`*^9, 3.654529204221353*^9, {3.654530153145495*^9, 
+   3.654530179911942*^9}, 3.654530378506577*^9}]
+}, Open  ]],
+
+Cell["Rotational energy", "Text",
+ CellChangeTimes->{{3.6545286468861027`*^9, 3.65452867048418*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"velE", " ", "=", " ", 
+  RowBox[{"0.5", " ", "*", " ", "m", " ", "*", " ", 
+   RowBox[{"l", "^", "2"}], " ", "*", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"\[Theta]", "'"}], "[", "t", "]"}], ")"}], "^", 
+    "2"}]}]}]], "Input",
+ CellChangeTimes->{{3.6545286400643673`*^9, 3.654528643609367*^9}, {
+  3.654528673896119*^9, 3.654528702056348*^9}}],
+
+Cell[BoxData[
+ RowBox[{"0.5`", " ", 
+  SuperscriptBox[
+   RowBox[{
+    SuperscriptBox["\[Theta]", "\[Prime]",
+     MultilineFunction->None], "[", "t", "]"}], "2"]}]], "Output",
+ CellChangeTimes->{
+  3.654528702843953*^9, {3.6545301531768208`*^9, 3.6545301799159107`*^9}, 
+   3.654530378533906*^9}]
+}, Open  ]],
+
+Cell["\<\
+Total energy:
+\
+\>", "Text",
+ CellChangeTimes->{{3.654528724751191*^9, 3.65452876386405*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Energy", " ", "=", " ", 
+  RowBox[{"posE", " ", "+", " ", "velE"}]}]], "Input",
+ CellChangeTimes->{{3.654528766176621*^9, 3.654528772316331*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"-", "9.82`"}], " ", 
+   RowBox[{"Cos", "[", 
+    RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}], "+", 
+  RowBox[{"0.5`", " ", 
+   SuperscriptBox[
+    RowBox[{
+     SuperscriptBox["\[Theta]", "\[Prime]",
+      MultilineFunction->None], "[", "t", "]"}], "2"]}]}]], "Output",
+ CellChangeTimes->{{3.6545291768386717`*^9, 3.654529209224612*^9}, {
+   3.654530153206293*^9, 3.65453017994267*^9}, 3.654530378563077*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"dEnergy", " ", "=", 
+  RowBox[{
+   SubscriptBox["\[PartialD]", "t"], "Energy", " "}]}]], "Input",
+ CellChangeTimes->{{3.654529092991703*^9, 3.654529095004397*^9}, {
+  3.6545291866724243`*^9, 3.6545291905065928`*^9}, {3.6545292345525103`*^9, 
+  3.654529234707191*^9}, {3.654529345891873*^9, 3.65452934873105*^9}},
+ NumberMarks->False],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"9.82`", " ", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"\[Theta]", "[", "t", "]"}], "]"}], " ", 
+   RowBox[{
+    SuperscriptBox["\[Theta]", "\[Prime]",
+     MultilineFunction->None], "[", "t", "]"}]}], "+", 
+  RowBox[{"1.`", " ", 
+   RowBox[{
+    SuperscriptBox["\[Theta]", "\[Prime]",
+     MultilineFunction->None], "[", "t", "]"}], " ", 
+   RowBox[{
+    SuperscriptBox["\[Theta]", "\[Prime]\[Prime]",
+     MultilineFunction->None], "[", "t", "]"}]}]}]], "Output",
+ CellChangeTimes->{
+  3.6545290475541973`*^9, {3.654529095509334*^9, 3.654529126899724*^9}, {
+   3.654529170725963*^9, 3.654529235648107*^9}, {3.65452933258923*^9, 
+   3.6545293495181437`*^9}, {3.654530153210162*^9, 3.65453017997127*^9}, 
+   3.6545303785677853`*^9}]
+}, Open  ]],
+
+Cell["As we have:", "Text",
+ CellChangeTimes->{{3.654530054731928*^9, 3.654530061220842*^9}, {
+  3.6545302035749598`*^9, 3.654530225521097*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"u", "[", "t", "]"}], " ", "=", "  ", 
+  RowBox[{
+   RowBox[{"m", " ", "*", " ", 
+    RowBox[{"l", "^", "2"}], "*", 
+    RowBox[{
+     RowBox[{"\[Theta]", "''"}], "[", "t", "]"}]}], "+", 
+   RowBox[{"b", "*", 
+    RowBox[{
+     RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}], "+", 
+   RowBox[{"m", "*", "g", "*", "l", "*", 
+    RowBox[{"Sin", "[", 
+     RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"9.82`", " ", 
+   RowBox[{"Sin", "[", 
+    RowBox[{"\[Theta]", "[", "t", "]"}], "]"}]}], "+", 
+  RowBox[{
+   SuperscriptBox["\[Theta]", "\[Prime]\[Prime]",
+    MultilineFunction->None], "[", "t", "]"}]}]], "Output",
+ CellChangeTimes->{3.654530260445106*^9, 3.654530378698534*^9}]
+}, Open  ]],
+
+Cell["This is equal to", "Text",
+ CellChangeTimes->{{3.654530229885652*^9, 3.654530255939088*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dEnergy", " ", "\[Equal]", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"u", "[", "t", "]"}], " ", "-", " ", 
+      RowBox[{"b", "*", 
+       RowBox[{
+        RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}]}], ")"}], " ", "*", " ", 
+    
+    RowBox[{
+     RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}]}], " ", "//", " ", 
+  "Simplify"}]], "Input",
+ CellChangeTimes->{{3.654530066350294*^9, 3.654530138888433*^9}}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.654530052484437*^9, {3.654530096271283*^9, 3.6545301800932417`*^9}, 
+   3.654530264097939*^9, 3.654530378729857*^9}]
+}, Open  ]],
+
+Cell[BoxData["Quit"], "Input",
+ CellChangeTimes->{{3.654530306263702*^9, 3.6545303068648863`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{"dEnergy", " ", "\[Equal]", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"u", "[", "t", "]"}], " ", "-", " ", 
+       RowBox[{"b", "*", 
+        RowBox[{
+         RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}]}], ")"}], " ", "*", " ", 
+     RowBox[{
+      RowBox[{"\[Theta]", "'"}], "[", "t", "]"}]}]}], ",", " ", 
+   RowBox[{"u", "[", "t", "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.654530291904377*^9, 3.654530324610086*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"u", "[", "t", "]"}], "\[Rule]", 
+    FractionBox["dEnergy", 
+     RowBox[{
+      SuperscriptBox["\[Theta]", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}]]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.65453030222296*^9, 3.654530325509993*^9}, 
+   3.654530390672974*^9}]
+}, Open  ]],
+
+Cell["\<\
+If we use the control law suggested in MIT lecture \
+7(https://www.youtube.com/watch?v=9qnpQ1hVlqw), we get\
+\>", "Text",
+ CellChangeTimes->{{3.6545308093872013`*^9, 3.654530849621229*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"u", "[", "t", "]"}], " ", "=", " ", 
+  RowBox[{
+   RowBox[{"-", "K"}], " ", "*", " ", 
+   RowBox[{
+    RowBox[{"\[Theta]", "'"}], "[", "t", "]"}], " ", "*", " ", 
+   RowBox[{"(", 
+    RowBox[{"Energy", " ", "-", " ", "Energy_desired"}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.654530854433161*^9, 3.6545309257039967`*^9}}]
+},
+WindowSize->{808, 962},
+WindowMargins->{{Automatic, -2}, {-38, Automatic}},
+FrontEndVersion->"10.0 for Linux x86 (64-bit) (June 27, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 166, 2, 35, "Text"],
+Cell[727, 24, 337, 7, 32, "Input"],
+Cell[CellGroupData[{
+Cell[1089, 35, 702, 17, 32, "Input"],
+Cell[1794, 54, 406, 11, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2237, 70, 733, 18, 32, "Input"],
+Cell[2973, 90, 3692, 79, 115, "Output"]
+}, Open  ]],
+Cell[6680, 172, 262, 5, 32, "Input"],
+Cell[6945, 179, 113, 1, 35, "Text"],
+Cell[CellGroupData[{
+Cell[7083, 184, 146, 2, 32, "Input"],
+Cell[7232, 188, 2780, 64, 46, "Output"]
+}, Open  ]],
+Cell[10027, 255, 1382, 38, 46, "Input"],
+Cell[CellGroupData[{
+Cell[11434, 297, 215, 5, 32, "Input"],
+Cell[11652, 304, 452, 11, 35, "Output"]
+}, Open  ]],
+Cell[12119, 318, 409, 8, 60, "Text"],
+Cell[CellGroupData[{
+Cell[12553, 330, 465, 9, 32, "Input"],
+Cell[13021, 341, 279, 7, 32, "Output"]
+}, Open  ]],
+Cell[13315, 351, 100, 1, 35, "Text"],
+Cell[CellGroupData[{
+Cell[13440, 356, 392, 10, 32, "Input"],
+Cell[13835, 368, 297, 8, 34, "Output"]
+}, Open  ]],
+Cell[14147, 379, 103, 4, 59, "Text"],
+Cell[CellGroupData[{
+Cell[14275, 387, 169, 3, 32, "Input"],
+Cell[14447, 392, 456, 12, 34, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14940, 409, 357, 7, 32, "Input"],
+Cell[15300, 418, 762, 19, 32, "Output"]
+}, Open  ]],
+Cell[16077, 440, 144, 2, 35, "Text"],
+Cell[CellGroupData[{
+Cell[16246, 446, 445, 13, 32, "Input"],
+Cell[16694, 461, 313, 8, 32, "Output"]
+}, Open  ]],
+Cell[17022, 472, 98, 1, 35, "Text"],
+Cell[CellGroupData[{
+Cell[17145, 477, 463, 14, 32, "Input"],
+Cell[17611, 493, 172, 3, 32, "Output"]
+}, Open  ]],
+Cell[17798, 499, 98, 1, 32, "Input"],
+Cell[CellGroupData[{
+Cell[17921, 504, 513, 14, 32, "Input"],
+Cell[18437, 520, 358, 10, 52, "Output"]
+}, Open  ]],
+Cell[18810, 533, 199, 4, 59, "Text"],
+Cell[19012, 539, 360, 9, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
