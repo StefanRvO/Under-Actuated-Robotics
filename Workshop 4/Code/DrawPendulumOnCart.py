@@ -4,7 +4,7 @@ from matplotlib import animation
 import matplotlib
 
 class DrawPendulumOnCart:
-    def __init__(self,P, C = None, G = None, frameskip = 1):
+    def __init__(self,P, C, G = None, frameskip = 1):
         self.P = P
         self.C = C
         self.G = G
@@ -39,12 +39,13 @@ class DrawPendulumOnCart:
 
 
         self.cart.set_xy((self.P.x - 0.5,-0.25))
-        self.rod.set_data([self.P.x, self.P.x + np.sin(self.P.angle) * self.P.l], [0, np.cos(self.P.angle) * self.P.l])
+        self.rod.set_data([self.P.x, self.P.x - np.sin(self.P.angle) * self.P.l], [0, np.cos(self.P.angle) * self.P.l])
         self.rod_dot.center = (self.P.x, 0)
         return self.cart, self.rod, self.rod_dot, self.tracks,
 
     def SimStep(self):
-        self.P.doStep()
+        control = self.C.calcControlSignal(self.lastout)
+        self.lastout = self.P.doStep(control)
 
     #begin the animation
     def startAnimation(self, speedup = 1, runtime = None, filename = None):
