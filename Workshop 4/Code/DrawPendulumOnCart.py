@@ -4,7 +4,7 @@ from matplotlib import animation
 import matplotlib
 
 class DrawPendulumOnCart:
-    def __init__(self,P, C, G = None, frameskip = 1):
+    def __init__(self,P, C, G , frameskip = 1):
         self.P = P
         self.C = C
         self.G = G
@@ -16,9 +16,11 @@ class DrawPendulumOnCart:
         self.ax = plt.axes(xlim=(-self.P.l * 2.5, self.P.l * 2.5), ylim =(-self.P.l * 2.5, self.P.l * 2.5))
         self.rod, = self.ax.plot([], [], 'o-', lw=2)
         self.rod_dot = plt.Circle((self.P.l * 10000, self.P.l * 10000), 0.075, fc='g') #create Off-screen, as we need to initialize for blitting
+        self.end_dot = plt.Circle((self.P.l * 10000, self.P.l * 10000), 0.1, fc='g') #create Off-screen, as we need to initialize for blitting
         self.cart = matplotlib.patches.Rectangle((10000 * self.P.l, 10000 * self.P.l), width = 1, height = 0.5, alpha = 0.5) #create the cart offscreen
         self.tracks = matplotlib.patches.Rectangle((-9999999, -0.35), 9999999 * 2, 0.1) #Top of Tracks are at -0.25
         self.ax.add_patch(self.rod_dot)
+        self.ax.add_patch(self.end_dot)
         self.ax.add_patch(self.cart)
         self.ax.add_patch(self.tracks)
         self.ax.add_patch(self.rod)
@@ -27,10 +29,11 @@ class DrawPendulumOnCart:
     def init(self):
         self.rod.set_data([], [])
         self.ax.add_patch(self.rod_dot)
+        self.ax.add_patch(self.end_dot)
         self.ax.add_patch(self.cart)
         self.ax.add_patch(self.tracks)
         self.ax.add_patch(self.rod)
-        return  self.cart, self.rod, self.rod_dot, self.tracks,
+        return  self.cart, self.rod, self.rod_dot, self.tracks, self.end_dot
 
     #animation function
     def animate(self, i):
@@ -41,11 +44,14 @@ class DrawPendulumOnCart:
         self.cart.set_xy((self.P.x - 0.5,-0.25))
         self.rod.set_data([self.P.x, self.P.x - np.sin(self.P.angle) * self.P.l], [0, np.cos(self.P.angle) * self.P.l])
         self.rod_dot.center = (self.P.x, 0)
-        return self.cart, self.rod, self.rod_dot, self.tracks,
+        self.end_dot.center = (self.P.x - np.sin(self.P.angle) * self.P.l, np.cos(self.P.angle) * self.P.l)
+        return self.cart, self.rod, self.rod_dot, self.tracks, self.end_dot
 
     def SimStep(self):
+        self.G.recordDataPoint(self.lastout)
         control = self.C.calcControlSignal(self.lastout)
         self.lastout = self.P.doStep(control)
+        self.G.recordControlSignal(control)
 
     #begin the animation
     def startAnimation(self, speedup = 1, runtime = None, filename = None):
