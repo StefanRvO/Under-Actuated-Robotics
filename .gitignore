@@ -82,3 +82,6 @@ target/
 *.mtc1
 *.out
 *.synctex.gz
+
+########Libreoffice#########
+*.odt

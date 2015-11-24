@@ -13,7 +13,7 @@ class DrawPendulumOnCart:
 
         #setup matplotlib stuff
         self.fig = plt.figure(num=None, figsize=(8, 7), dpi=80, facecolor='w', edgecolor='k')
-        self.ax = plt.axes(xlim=(-self.P.l * 2.5, self.P.l * 2.5), ylim =(-self.P.l * 2.5, self.P.l * 2.5))
+        self.ax = plt.axes(xlim=(-self.P.l * 3, self.P.l * 3), ylim =(-self.P.l * 5, self.P.l * 5))
         self.rod, = self.ax.plot([], [], 'o-', lw=2)
         self.rod_dot = plt.Circle((self.P.l * 10000, self.P.l * 10000), 0.075, fc='g') #create Off-screen, as we need to initialize for blitting
         self.end_dot = plt.Circle((self.P.l * 10000, self.P.l * 10000), 0.1, fc='g') #create Off-screen, as we need to initialize for blitting
@@ -37,8 +37,10 @@ class DrawPendulumOnCart:
 
     #animation function
     def animate(self, i):
-        for i in range(self.frameskip):
-            self.SimStep()
+        while(True):
+            for i in range(self.frameskip):
+                self.SimStep()
+            if self.P.generation % 10 == 0: break
 
 
         self.cart.set_xy((self.P.x - 0.5,-0.25))

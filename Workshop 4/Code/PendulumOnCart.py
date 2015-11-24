@@ -11,7 +11,7 @@ class PendulumOnCart:
     def __init__(self,g = 9.82, m_c = 1, m = 1, l = 1,  \
         init_angle = 0, init_angle_speed = 0, init_x = 0, timestep = 0.01, \
         init_x_speed = 0,
-        x_limits = [-2.5, 2.5], angle_limits = [np.radians(-15), np.radians(15)],  noise = None ):
+        x_limits = [-9.5, 9.5], angle_limits = [np.radians(-25), np.radians(25)],  noise = None ):
         self.timestep = timestep
         self.g = g #acceleration due to gravity
         self.m_c = m_c #mass of cart
@@ -23,12 +23,18 @@ class PendulumOnCart:
         self.x_speed = init_x_speed
         self.noise = noise
         self.x_limits = x_limits
+        self.generation = 0
+
         self.angle_limits = angle_limits
     def reset(self):
-        self.x = np.random.random_sample() * (self.x_limits[1] - self.x_limits[0])  + self.x_limits[0]
-        self.angle = np.random.random_sample() * (self.angle_limits[1] - self.angle_limits[0])  + self.angle_limits[0]
-        self.angle_speed = (np.random.random_sample() - 0.5) * 0.2
-        self.x_speed = (np.random.random_sample() - 0.5) * 0.2
+        #return
+        self.x = np.random.random_sample() * (self.x_limits[1] / 4 - self.x_limits[0] / 4)  + self.x_limits[0] / 4
+        self.angle = np.random.random_sample() * (self.angle_limits[1] / 2 - self.angle_limits[0] / 2)  + self.angle_limits[0] / 2
+     
+        self.angle_speed = np.random.random_sample() - 0.2
+        self.x_speed = np.random.random_sample() - 0.2
+        self.generation += 1
+        print("Starting generation " + str(self.generation))
     def angle_deriv(self, angle_speed):
         return angle_speed
 
@@ -83,14 +89,14 @@ class PendulumOnCart:
         x_speed_deriv = self.x_speed_deriv(self.angle, self.angle_speed, control_input)
         #update anglespeed and xspeed
 
-
-        self.angle += angle_deriv * self.timestep
-        self.x += x_deriv * self.timestep
-
         self.angle_speed += angle_speed_deriv * self.timestep
         self.x_speed += x_speed_deriv * self.timestep
         angle_deriv = self.angle_deriv(self.angle_speed)
         x_deriv = self.x_deriv(self.x_speed)
+        self.angle += angle_deriv * self.timestep
+        self.x += x_deriv * self.timestep
+
+
 
 
 
