@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import cos, sin
 import random
 
 class DoublePendulumOnCart:
@@ -41,24 +42,69 @@ class DoublePendulumOnCart:
         self.h6 = self.m2 * (self.l2 ** 2) + self.J2
         self.h7 = self.m1 * self.l1 * self.g + self.m2 * self.L1 * self.g
         self.h8 = self.m2 * self.l2 * self.g
-    def angle1_deriv(self, angle_speed):
-        return angle_speed
-
-    def angle1_speed_deriv(self, angle, angle_speed, control):
-        num = control[0][0] * np.cos(angle) + (self.m + self.m_c) * self.g * np.sin(angle) - \
-            self.l * self.m * np.cos(angle) * np.sin(angle) * (angle_speed ** 2)
-
-        denom = self.l * (self.m + self.m_c - self.m * (np.cos(angle) ** 2))
-        return num / denom
+    def angle1_deriv(self, angle1_speed):
+        return angle1_speed
+    def angle2_deriv(self, angle2_speed):
+        return angle2_speed
 
     def x_deriv(self, x_speed):
         return x_speed
 
-    def x_speed_deriv(self, angle, angle_speed, control):
-        num = control[0][0] + self.g * self.m * np.cos(angle) * np.sin(angle) - \
-            self.l * self.m * np.sin(angle) * (angle_speed ** 2)
-        denom = self.m + self.m_c - self.m * (np.cos(angle) ** 2)
+    def angle1_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
+        num1 = (-self.h2 * self.h6 * cos(angle1) + self.h3 * self.h5 * cos(angle1 - angle2) * cos(angle2)) * control[0][0]
+        num2 = self.h7 * (self.h1 * self.h6 - (self.h3 ** 2) * (cos(angle2) ** 2)) *sin(angle1)
+        num3 = self.h8 * (- self.h1 * self.h5 * cos(angle1 - angle2) + \
+            self.h2 * self.h3 * cos(angle1) * cos(angle2)) * sin(angle2)
+        num = num1 + num2 + num3
 
+        denom1 = self.h1 * self.h4 * self.h6
+        denom2 = -(self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
+        denom3 =  - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
+        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2)* cos(angle2)
+        denom5 = -(self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
+        denom = denom1 + denom2 + denom3 + denom4 + denom5
+        #print(denom)
+        #print(num)
+        return num / denom
+
+    def angle2_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
+        num1 = (self.h2 * self.h5 * cos(angle1) * cos(angle1 - angle2) - \
+                self.h3 * self.h4 * cos(angle2)) * control[0][0]
+        num2 = - self.h1 * self.h5 * self.h7 * cos(angle1 - angle2) * sin(angle1)
+        num3 = self.h2 * self.h3 * self.h7 * cos(angle1) * cos(angle2) * sin(angle1)
+        num4 = self.h1 * self.h4 * self.h8 * sin(angle2)
+        num5 = - (self.h2 ** 2) * self.h8 * (cos(angle1) ** 2) * sin(angle2)
+
+        num = num1 + num2 + num3 + num4 + num5
+
+        denom1 = self.h1 * self.h4 * self.h6
+        denom2 = -(self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
+        denom3 =  - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
+        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2)* cos(angle2)
+        denom5 = -(self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
+        denom = denom1 + denom2 + denom3 + denom4 + denom5
+        print(num)
+        print(denom)
+        print()
+        return num / denom
+
+    def x_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
+        #This is a long expression, derived in the mathematica notebook
+        num1 = (self.h4 * self.h6 - (self.h5 ** 2) * (cos(angle1 -angle2) ** 2)) * control[0][0]
+        num2 = self.h3 * cos(angle2) * \
+         ( self.h5 * self.h7 * cos(angle1 - angle2) * sin(angle1) - self.h4 * self.h8 * sin(angle2))
+        num3 = cos(angle1) * (-self.h2 * self.h6 * self.h7 * sin(angle1) + self.h2 * self.h5 * self.h8 * cos(angle1 - angle2) * sin(angle2) )
+        num = num1 + num2 + num3
+        denom1 = self.h1  * self.h4 * self.h6
+        denom2 = - (self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
+        denom3 = -self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
+        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle2) * cos(angle1 - angle2)
+        denom5 = - (self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
+        denom = denom1 + denom2 + denom3 + denom4 + denom5
+        #print(num)
+        #print(denom)
+        #print(num /denom)
+        #print()
         return num / denom
 
     def Runge_Kutta(self, control_input): #Computation of runge kutta. Need to implement some kind of general method when it become to troublesome this way
@@ -90,22 +136,27 @@ class DoublePendulumOnCart:
 
     def Euler(self, control_input):
         #progress one step using Euler method
-
-        angle_speed_deriv = self.angle_speed_deriv(self.angle, self.angle_speed, control_input)
-        x_speed_deriv = self.x_speed_deriv(self.angle, self.angle_speed, control_input)
+        angle1_speed_deriv = self.angle1_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
+        angle2_speed_deriv = self.angle2_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
+        x_speed_deriv = self.x_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
         #update anglespeed and xspeed
-
-        self.angle_speed += angle_speed_deriv * self.timestep
+        stracc = str(x_speed_deriv) + "\n" + str(angle1_speed_deriv) + "\n" + str(angle2_speed_deriv) + "\n"
+        print(stracc)
+        self.angle1_speed += angle1_speed_deriv * self.timestep
+        self.angle2_speed += angle2_speed_deriv * self.timestep
         self.x_speed += x_speed_deriv * self.timestep
-        angle_deriv = self.angle_deriv(self.angle_speed)
+        angle1_deriv = self.angle1_deriv(self.angle1_speed)
+        angle2_deriv = self.angle2_deriv(self.angle2_speed)
         x_deriv = self.x_deriv(self.x_speed)
-        self.angle += angle_deriv * self.timestep
+        self.angle1 += angle1_deriv * self.timestep
+        self.angle2 += angle2_deriv * self.timestep
         self.x += x_deriv * self.timestep
 
 
     def doStep(self, control_input = np.array([[0]])): #control input is a scalar
         #Do progression
-        #self.Runge_Kutta(control_input)
+        #print(control_input)
+        self.Euler(control_input)
 
         #returns a np matrix of size 2 x 1
         output = np.array([[self.x], [self.x_speed], [self.angle1], [self.angle1_speed], [self.angle2], [self.angle2_speed], ])
