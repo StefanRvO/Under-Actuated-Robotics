@@ -52,11 +52,18 @@ class DoublePendulumOnCart:
 
     def angle1_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
         num1 = (-self.h2 * self.h6 * cos(angle1) + self.h3 * self.h5 * cos(angle1 - angle2) * cos(angle2)) * control[0][0]
-        num2 = self.h7 * (self.h1 * self.h6 - (self.h3 ** 2) * (cos(angle2) ** 2)) *sin(angle1)
-        num3 = self.h8 * (- self.h1 * self.h5 * cos(angle1 - angle2) + \
-            self.h2 * self.h3 * cos(angle1) * cos(angle2)) * sin(angle2)
-        num = num1 + num2 + num3
-
+        num2 = self.h1* self.h6 * self.h7 * sin(angle1)
+        num3 = -(self.h3 ** 2) * self.h7 * (cos(angle2) ** 2) * sin(angle1)
+        num4 =  -self.h1 * self.h5 * self.h8 * cos(angle1 - angle2) * sin(angle2)
+        num5 = self.h2 * self.h3 * self.h8 * cos(angle1) * cos(angle2) * sin(angle2)
+        num6 = -1/2. * (self.h2 * (-self.h3 * self.h5 + self.h2 * self.h6) * sin(2 * angle1) + \
+            + self.h5 * (-self.h2 * self.h3 + self.h1 * self.h5) * sin(2 * (angle1 - angle2)))  * (angle1_speed ** 2)
+        num7 =  - self.h1 * self.h5 * self.h6 * sin(angle1 - angle2) * (angle2_speed ** 2)
+        num8 =  (self.h3 ** 2) * self.h5 * (cos(angle2) ** 2) * sin(angle1 - angle2) * (angle2_speed ** 2)
+        num9 =  -self.h2 * self.h3 * self.h6 * cos(angle1) * sin(angle2) * (angle2_speed ** 2)
+        num10 = (self.h3 ** 2) * self.h5 * cos(angle1 - angle2) * cos(angle2) * sin(angle2) * (angle2_speed ** 2)
+        num = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 +num9 + num10
+        #print(num)
         denom1 = self.h1 * self.h4 * self.h6
         denom2 = -(self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
         denom3 =  - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
@@ -64,28 +71,28 @@ class DoublePendulumOnCart:
         denom5 = -(self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
         denom = denom1 + denom2 + denom3 + denom4 + denom5
         #print(denom)
-        #print(num)
         return num / denom
 
     def angle2_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
-        num1 = (self.h2 * self.h5 * cos(angle1) * cos(angle1 - angle2) - \
-                self.h3 * self.h4 * cos(angle2)) * control[0][0]
+        num1 = (self.h2 * self.h5 * cos(angle1) * cos(angle1 - angle2) - self.h3 * self.h4 * cos(angle2)) * control[0][0]
         num2 = - self.h1 * self.h5 * self.h7 * cos(angle1 - angle2) * sin(angle1)
         num3 = self.h2 * self.h3 * self.h7 * cos(angle1) * cos(angle2) * sin(angle1)
         num4 = self.h1 * self.h4 * self.h8 * sin(angle2)
         num5 = - (self.h2 ** 2) * self.h8 * (cos(angle1) ** 2) * sin(angle2)
-
-        num = num1 + num2 + num3 + num4 + num5
-
-        denom1 = self.h1 * self.h4 * self.h6
-        denom2 = -(self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
-        denom3 =  - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
-        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2)* cos(angle2)
-        denom5 = -(self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
-        denom = denom1 + denom2 + denom3 + denom4 + denom5
+        num6 =(-self.h4 * (self.h2 * self.h3 - self.h1 * self.h5) * cos(angle2) * sin(angle1) + ( (self.h2 ** 2) - self.h1 * self.h4) * self.h5 * cos(angle1) * sin(angle2)) * (angle1_speed ** 2)
+        num7 = - self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle2) * sin(angle1 - angle2) * (angle2_speed ** 2)
+        num8 = 1/2. * self.h1 * (self.h5 ** 2) * sin(2*(angle1 - angle2)) * (angle2_speed ** 2)
+        num9 = self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2) *sin(angle2) * (angle2_speed ** 2)
+        num10 = -(self.h3 ** 2) * self.h4 * cos(angle2) * sin(angle2) * (angle2_speed ** 2)
+        num = num1 + num2 + num3 + num4 + num5 +num6 + num7 + num8 + num9 + num10
         #print(num)
+        denom1 =  self.h1 * self.h4 * self.h6
+        denom2 = -  (self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
+        denom3 = -  self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
+        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2) * cos(angle2)
+        denom5 = -  (self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
+        denom = denom1 + denom2 + denom3 + denom4 + denom5
         #print(denom)
-        #print()
         return num / denom
 
     def x_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
@@ -118,29 +125,60 @@ class DoublePendulumOnCart:
         return -num / denom
 
     def Runge_Kutta(self, control_input): #Computation of runge kutta. Need to implement some kind of general method when it become to troublesome this way
-        angle_ku1 = self.angle_speed_deriv(self.angle, self.angle_speed, control_input)
-        x_ku1     = self.x_speed_deriv(self.angle, self.angle_speed, control_input)
-        angle_kt1 = self.angle_deriv(self.angle_speed)
+        angle1_ku1 = self.angle1_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
+        angle2_ku1 = self.angle2_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
+        x_ku1      = self.x_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
+        angle1_kt1 = self.angle1_deriv(self.angle1_speed)
+        angle2_kt1 = self.angle2_deriv(self.angle2_speed)
         x_kt1     = self.x_deriv(self.x_speed)
-        angle_ku2 = self.angle_speed_deriv(self.angle + angle_kt1 * self.timestep * 0.5, self.angle_speed + angle_ku1 * self.timestep * 0.5, control_input)
-        x_ku2     = self.x_speed_deriv(self.angle + angle_kt1 * self.timestep * 0.5, self.angle_speed + angle_ku1 * self.timestep * 0.5, control_input)
-        angle_kt2 = self.angle_deriv(self.angle_speed + angle_ku1 * self.timestep * 0.5)
+
+        angle1_ku2 = self.angle1_speed_deriv(self.angle1 + angle1_kt1 * self.timestep * 0.5, self.angle1_speed + angle1_ku1 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt1 * self.timestep * 0.5, self.angle2_speed + angle2_ku1 * self.timestep * 0.5 \
+                    ,self.x + x_kt1 * self.timestep * 0.5, self.x_speed + x_ku1 * self.timestep * 0.5, control_input)
+        angle2_ku2 = self.angle2_speed_deriv(self.angle1 + angle1_kt1 * self.timestep * 0.5, self.angle1_speed + angle1_ku1 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt1 * self.timestep * 0.5, self.angle2_speed + angle2_ku1 * self.timestep * 0.5 \
+                    ,self.x + x_kt1 * self.timestep * 0.5, self.x_speed + x_ku1 * self.timestep * 0.5, control_input)
+        x_ku2      = self.x_speed_deriv(self.angle1 + angle1_kt1 * self.timestep * 0.5, self.angle1_speed + angle1_ku1 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt1 * self.timestep * 0.5, self.angle2_speed + angle2_ku1 * self.timestep * 0.5 \
+                    ,self.x + x_kt1 * self.timestep * 0.5, self.x_speed + x_ku1 * self.timestep * 0.5, control_input)
+        angle1_kt2 = self.angle1_deriv(self.angle1_speed + angle1_ku1 * self.timestep * 0.5)
+        angle2_kt2 = self.angle2_deriv(self.angle2_speed + angle2_ku1 * self.timestep * 0.5)
         x_kt2     = self.x_deriv(self.x_speed + x_ku1 * self.timestep * 0.5)
-        angle_ku3 = self.angle_speed_deriv(self.angle + angle_kt2 * self.timestep * 0.5, self.angle_speed + angle_ku2 * self.timestep * 0.5, control_input)
-        x_ku3     = self.x_speed_deriv(self.angle + angle_kt2 * self.timestep * 0.5, self.angle_speed + angle_ku2 * self.timestep * 0.5, control_input)
-        angle_kt3 = self.angle_deriv(self.angle_speed + angle_ku2 * self.timestep * 0.5)
-        x_kt3     = self.x_deriv(self.x_speed + x_ku2 * self.timestep * 0.5)
-        angle_ku4 = self.angle_speed_deriv(self.angle + angle_kt3 * self.timestep, self.angle_speed + angle_ku3 * self.timestep, control_input)
-        x_ku4     = self.x_speed_deriv(self.angle + angle_kt3 * self.timestep, self.angle_speed + angle_ku3 * self.timestep, control_input)
-        angle_kt4 = self.angle_deriv(self.angle_speed + angle_ku3 * self.timestep)
-        x_kt4     = self.x_deriv(self.x_speed + x_ku3 * self.timestep)
+
+        angle1_ku3 = self.angle1_speed_deriv(self.angle1 + angle1_kt2 * self.timestep * 0.5, self.angle1_speed + angle1_ku2 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt2 * self.timestep * 0.5, self.angle2_speed + angle2_ku2 * self.timestep * 0.5 \
+                    ,self.x + x_kt2 * self.timestep * 0.5, self.x_speed + x_ku2 * self.timestep * 0.5, control_input)
+        angle2_ku3 = self.angle2_speed_deriv(self.angle1 + angle1_kt2 * self.timestep * 0.5, self.angle1_speed + angle1_ku2 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt2 * self.timestep * 0.5, self.angle2_speed + angle2_ku2 * self.timestep * 0.5 \
+                    ,self.x + x_kt2 * self.timestep * 0.5, self.x_speed + x_ku2 * self.timestep * 0.5, control_input)
+        x_ku3      = self.x_speed_deriv(self.angle1 + angle1_kt2 * self.timestep * 0.5, self.angle1_speed + angle1_ku2 * self.timestep * 0.5 \
+                    , self.angle2 + angle2_kt2 * self.timestep * 0.5, self.angle2_speed + angle2_ku2 * self.timestep * 0.5 \
+                    ,self.x + x_kt2 * self.timestep * 0.5, self.x_speed + x_ku2 * self.timestep * 0.5, control_input)
+        angle1_kt3 = self.angle1_deriv(self.angle1_speed + angle1_ku2 * self.timestep * 0.5)
+        angle2_kt3 = self.angle2_deriv(self.angle2_speed + angle2_ku2 * self.timestep * 0.5)
+        x_kt3      = self.x_deriv(self.x_speed + x_ku2 * self.timestep * 0.5)
+
+        angle1_ku4 = self.angle1_speed_deriv(self.angle1 + angle1_kt3 * self.timestep, self.angle1_speed + angle1_ku3 * self.timestep \
+                    , self.angle2 + angle2_kt3 * self.timestep, self.angle2_speed + angle2_ku3 * self.timestep \
+                    ,self.x + x_kt3 * self.timestep, self.x_speed + x_ku3 * self.timestep, control_input)
+        angle2_ku4 = self.angle2_speed_deriv(self.angle1 + angle1_kt3 * self.timestep, self.angle1_speed + angle1_ku3 * self.timestep \
+                    , self.angle2 + angle2_kt3 * self.timestep, self.angle2_speed + angle2_ku3 * self.timestep \
+                    ,self.x + x_kt3 * self.timestep, self.x_speed + x_ku3 * self.timestep, control_input)
+        x_ku4      = self.x_speed_deriv(self.angle1 + angle1_kt3 * self.timestep, self.angle1_speed + angle1_ku3 * self.timestep \
+                    , self.angle2 + angle2_kt3 * self.timestep, self.angle2_speed + angle2_ku3 * self.timestep \
+                    ,self.x + x_kt3 * self.timestep, self.x_speed + x_ku3 * self.timestep, control_input)
+        angle1_kt4 = self.angle1_deriv(self.angle1_speed + angle1_ku3 * self.timestep)
+        angle2_kt4 = self.angle2_deriv(self.angle2_speed + angle2_ku3 * self.timestep)
+        x_kt4      = self.x_deriv(self.x_speed + x_ku3 * self.timestep)
 
         #calculate new angle speed
-        self.angle_speed = self.angle_speed + (self.timestep / 6) * (angle_ku1 + angle_ku2 * 2 + angle_ku3 * 2 + angle_ku4)
+        self.angle1_speed = self.angle1_speed + (self.timestep / 6) * (angle1_ku1 + angle1_ku2 * 2 + angle1_ku3 * 2 + angle1_ku4)
+        self.angle2_speed = self.angle2_speed + (self.timestep / 6) * (angle2_ku1 + angle2_ku2 * 2 + angle2_ku3 * 2 + angle2_ku4)
         #calculate new x speed
         self.x_speed = self.x_speed + (self.timestep / 6) * (x_ku1 + x_ku2 * 2 + x_ku3 * 2 + x_ku4)
         #calculate new angle
-        self.angle = self.angle + (self.timestep / 6) * (angle_kt1 + angle_kt2 * 2 + angle_kt3 * 2 + angle_kt4)
+        self.angle1 = self.angle1 + (self.timestep / 6) * (angle1_kt1 + angle1_kt2 * 2 + angle1_kt3 * 2 + angle1_kt4)
+        self.angle2 = self.angle2 + (self.timestep / 6) * (angle2_kt1 + angle2_kt2 * 2 + angle2_kt3 * 2 + angle2_kt4)
         #calculate new x
         self.x = self.x + (self.timestep / 6) * (x_kt1 + x_kt2 * 2 + x_kt3 * 2 + x_kt4)
 
@@ -151,22 +189,22 @@ class DoublePendulumOnCart:
         x_speed_deriv = self.x_speed_deriv(self.angle1, self.angle1_speed, self.angle2, self.angle2_speed, self.x, self.x_speed, control_input)
         #update anglespeed and xspeed
         stracc = str(x_speed_deriv) + "\n" + str(angle1_speed_deriv) + "\n" + str(angle2_speed_deriv) + "\n"
-        print(stracc)
-        #self.angle1_speed += angle1_speed_deriv * self.timestep
-        #self.angle2_speed += angle2_speed_deriv * self.timestep
-        #self.x_speed += x_speed_deriv * self.timestep
+        #print(stracc)
+        self.angle1_speed += angle1_speed_deriv * self.timestep
+        self.angle2_speed += angle2_speed_deriv * self.timestep
+        self.x_speed += x_speed_deriv * self.timestep
         angle1_deriv = self.angle1_deriv(self.angle1_speed)
         angle2_deriv = self.angle2_deriv(self.angle2_speed)
         x_deriv = self.x_deriv(self.x_speed)
-        #self.angle1 += angle1_deriv * self.timestep
-        #self.angle2 += angle2_deriv * self.timestep
-        #self.x += x_deriv * self.timestep
+        self.angle1 += angle1_deriv * self.timestep
+        self.angle2 += angle2_deriv * self.timestep
+        self.x += x_deriv * self.timestep
 
 
     def doStep(self, control_input = np.array([[0]])): #control input is a scalar
         #Do progression
         #print(control_input)
-        self.Euler(control_input)
+        self.Runge_Kutta(control_input)
 
         #returns a np matrix of size 2 x 1
         output = np.array([[self.x], [self.x_speed], [self.angle1], [self.angle1_speed], [self.angle2], [self.angle2_speed], ])

@@ -31,23 +31,32 @@ class DoublePendulumOnCartController:
 
         TP2 =  1/2. * self.P.m2 * ((state[1][0] + self.P.L1 * state[3][0] * cos(state[2][0]) + \
                 self.P.l2 * state[5][0] * cos(state[4][0])) ** 2 + \
-        (self.P.L1 *  state[3][0] * np.sin(state[2][0]) + self.P.l2 * state[5][0] * sin(state[3][0])  ) ** 2 ) \
+        (self.P.L1 *  state[3][0] * np.sin(state[2][0]) + self.P.l2 * state[5][0] * sin(state[4][0])  ) ** 2 ) \
          + 1/2. * self.P.J2 * (state[5][0] ** 2)
 
+        #print(T_cart)
+        #print(TP1)
+        #print(TP2)
+        #print()
         T = T_cart + TP1 + TP2
 
         V_cart = 0
         VP1 = self.P.m1 * self.P.g * self.P.l1 * cos(state[2][0])
         VP2 = self.P.m2 * self.P.g * (self.P.L1 * cos(state[2][0]) + self.P.l2 * cos(state[4][0]) )
+        #print(VP1)
+        #print(VP2)
         V = V_cart + VP1 + VP2
         E = T + V
+        #E = 1/2. * self.P.h4 * (state[3][0] ** 2) + 1/2. * self.P.h6 * (state[5][0] ** 2) + \
+        #    self.P.h5 * state[3][0] * state[5][0] * cos(state[2][0] - state[4][0]) + \
+        #    self.P.h7 * cos(state[2][0]) + self.P.h8 * cos(state[4][0])
         return E
     def getControl(self, x):
         pass
 
     def Controller(self, x, setpoint):
-        output = [[7.3]]
-        #print(self.Energy(x))
+        output = [[0.]]
+        print(self.Energy(x))
         #print(x)
         return output
 
