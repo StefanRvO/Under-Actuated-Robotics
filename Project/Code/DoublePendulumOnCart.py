@@ -90,22 +90,32 @@ class DoublePendulumOnCart:
 
     def x_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
         #This is a long expression, derived in the mathematica notebook
-        num1 = (self.h4 * self.h6 - (self.h5 ** 2) * (cos(angle1 -angle2) ** 2)) * control[0][0]
-        num2 = self.h3 * cos(angle2) * \
-         ( self.h5 * self.h7 * cos(angle1 - angle2) * sin(angle1) - self.h4 * self.h8 * sin(angle2))
-        num3 = cos(angle1) * (-self.h2 * self.h6 * self.h7 * sin(angle1) + self.h2 * self.h5 * self.h8 * cos(angle1 - angle2) * sin(angle2) )
-        num = num1 + num2 + num3
-        denom1 = self.h1  * self.h4 * self.h6
-        denom2 = - (self.h2 ** 2) * self.h6 * (cos(angle1) ** 2)
-        denom3 = -self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2)
-        denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle2) * cos(angle1 - angle2)
-        denom5 = - (self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
-        denom = denom1 + denom2 + denom3 + denom4 + denom5
+        num1_1 = (-self.h2 * self.h6 * cos(angle1) + self.h3 * self.h5 * cos(angle1 - angle2) * cos(angle2))
+
+        num1_2 = (-self.h6 * self.h7 * sin(angle1)) + \
+            (self.h5 * cos(angle1 - angle2)) * (self.h8 * sin(angle2) + self.h5 * sin(angle1 - angle2) * (angle1_speed ** 2)) + \
+            (self.h5 * self.h6 * sin(angle1 - angle2) * (angle2_speed ** 2))
+
+        num1 = num1_1 * num1_2
+        #print(num1)
+        num2_1 = (self.h4 * self.h6 - (self.h5 ** 2) * (cos(angle1 - angle2) ** 2))
+        num2_2 = self.h6 * control[0][0] + \
+            (self.h2 * self.h6 * sin(angle1) - self.h3 * self.h5 * cos(angle2) * sin(angle1 - angle2)) * (angle1_speed ** 2) + \
+            self.h3 * sin(angle2) * (-self.h8 * cos(angle2) + self.h6 * (angle2_speed ** 2) )
+
+
+        num2 = num2_1 * num2_2
+        #print(num2)
+        num = num1 - num2
+        denom = self.h6 * \
+        (self.h1 * self.h4 * self.h6 - (self.h2 ** 2) * self.h6 * (cos(angle1) ** 2 ) - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2) + \
+        2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2) * cos(angle2) - (self.h3 ** 2) * self.h4 * (cos(angle2) ** 2))
+
         #print(num)
         #print(denom)
         #print(num /denom)
         #print()
-        return num / denom
+        return -num / denom
 
     def Runge_Kutta(self, control_input): #Computation of runge kutta. Need to implement some kind of general method when it become to troublesome this way
         angle_ku1 = self.angle_speed_deriv(self.angle, self.angle_speed, control_input)

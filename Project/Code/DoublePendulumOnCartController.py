@@ -46,7 +46,7 @@ class DoublePendulumOnCartController:
         pass
 
     def Controller(self, x, setpoint):
-        output = [[0.]]
+        output = [[7.3]]
         #print(self.Energy(x))
         #print(x)
         return output
