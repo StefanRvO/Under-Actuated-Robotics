@@ -1,43 +1,50 @@
 import numpy as np
 import random
 
-class PendulumOnCart:
+class DoublePendulumOnCart:
     #state variables
-    angle = 0
-    angle_speed = 0
+    angle1 = 0
+    angle1_speed = 0
+    angle2 = 0
+    angle2_speed = 0
     x = 0
     x_speed = 0
 
-    def __init__(self,g = 9.82, m_c = 1, m = 1, l = 1,  \
-        init_angle = 0, init_angle_speed = 0, init_x = 0, timestep = 0.01, \
-        init_x_speed = 0,
-        x_limits = [-9.5, 9.5], angle_limits = [np.radians(-25), np.radians(25)],  noise = None ):
+    def __init__(self,g = 9.82, m = 1, m1 = 1, m2 = 1, L1 = 1, L2 = 1,  \
+        init_angle1 = 0, init_angle1_speed = 0, init_angle2 = 0, init_angle2_speed = 0, init_x = 0, timestep = 0.01, \
+        init_x_speed = 0, noise = None ):
         self.timestep = timestep
         self.g = g #acceleration due to gravity
-        self.m_c = m_c #mass of cart
-        self.m = m #mass of pole
-        self.l = l #Lenght of pole
-        self.angle = init_angle
-        self.angle_speed = init_angle_speed
+        self.m = m #mass of cart
+        self.m1 = m1 #mass of pole
+        self.m2 = m2
+        self.L1 = L1 #Lenght of pole1
+        self.L2 = L2
+        self.angle1 = init_angle1
+        self.angle1_speed = init_angle1_speed
+        self.angle2 = init_angle2
+        self.angle2_speed = init_angle2_speed
         self.x = init_x
         self.x_speed = init_x_speed
         self.noise = noise
-        self.x_limits = x_limits
-        self.generation = 0
-
-        self.angle_limits = angle_limits
-    def reset(self):
-        self.x = np.random.random_sample() * (self.x_limits[1] / 4 - self.x_limits[0] / 4)  + self.x_limits[0] / 4
-        self.angle = np.random.random_sample() * (self.angle_limits[1] / 2 - self.angle_limits[0] / 2)  + self.angle_limits[0] / 2
-
-        self.angle_speed = np.random.random_sample() - 0.2
-        self.x_speed = np.random.random_sample() - 0.2
-        self.generation += 1
-        print("Starting generation " + str(self.generation))
-    def angle_deriv(self, angle_speed):
+        self.l1 = L1/2.
+        self.l2 = L2/2.
+        ####Calculate Moment of inertia####
+        self.J1 = self.m1 * self.L1 ** 2 / 12.
+        self.J2 = self.m2 * self.L2 ** 2 / 12.
+        ####Define some constants to make calculations easier####
+        self.h1 = self.m + self.m1 + self.m2
+        self.h2 = self.m1 * self.l1 + self.m2 * self.L1
+        self.h3 = self.m2 * self.l2
+        self.h4 = self.m1 * (self.l1 ** 2) + m2 * (self.L1 ** 2) + self.J1
+        self.h5 = self.m2 * self.l2 * self.L1
+        self.h6 = self.m2 * (self.l2 ** 2) + self.J2
+        self.h7 = self.m1 * self.l1 * self.g + self.m2 * self.L1 * self.g
+        self.h8 = self.m2 * self.l2 * self.g
+    def angle1_deriv(self, angle_speed):
         return angle_speed
 
-    def angle_speed_deriv(self, angle, angle_speed, control):
+    def angle1_speed_deriv(self, angle, angle_speed, control):
         num = control[0][0] * np.cos(angle) + (self.m + self.m_c) * self.g * np.sin(angle) - \
             self.l * self.m * np.cos(angle) * np.sin(angle) * (angle_speed ** 2)
 
@@ -96,15 +103,12 @@ class PendulumOnCart:
         self.x += x_deriv * self.timestep
 
 
-
-
-
     def doStep(self, control_input = np.array([[0]])): #control input is a scalar
         #Do progression
-        self.Runge_Kutta(control_input)
+        #self.Runge_Kutta(control_input)
 
         #returns a np matrix of size 2 x 1
-        output = np.array([ [self.angle], [self.angle_speed], [self.x], [self.x_speed] ])
+        output = np.array([[self.x], [self.x_speed], [self.angle1], [self.angle1_speed], [self.angle2], [self.angle2_speed], ])
         #apply noise to the output
         output = self.outputNoisyfier(output)
         return output

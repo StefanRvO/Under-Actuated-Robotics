@@ -9,7 +9,7 @@ def fixify_angle(angle, fixpoint):
 def zigmoid(z):
     return np.tanh(z)
 
-class PendulumOnCartController:
+class DoublePendulumOnCartController:
 
     def __init__(self, Plant, setpoint, outmax = None, outmin = None, outkooeficient = 10):
         self.outmax = outmax

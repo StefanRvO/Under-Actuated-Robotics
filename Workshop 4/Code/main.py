@@ -8,7 +8,7 @@ import numpy as np
 
 
 def __main__():
-    time = 0.02
+    time = 0.01
     P = PendulumOnCart(g = 9.82, m_c = 1, m = 1, l = 2.5, \
         init_angle = radians(0.1), init_angle_speed = 0, init_x = 0, init_x_speed = 0, \
         noise = np.array( [ [0.], [0.], [0.], [0.] ]), timestep = time)
