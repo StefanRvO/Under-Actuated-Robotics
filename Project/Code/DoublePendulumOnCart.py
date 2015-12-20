@@ -83,9 +83,9 @@ class DoublePendulumOnCart:
         denom4 = 2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2)* cos(angle2)
         denom5 = -(self.h3 ** 2) * self.h4 * (cos(angle2) ** 2)
         denom = denom1 + denom2 + denom3 + denom4 + denom5
-        print(num)
-        print(denom)
-        print()
+        #print(num)
+        #print(denom)
+        #print()
         return num / denom
 
     def x_speed_deriv(self, angle1, angle1_speed, angle2, angle2_speed, x, x_speed, control):
@@ -142,15 +142,15 @@ class DoublePendulumOnCart:
         #update anglespeed and xspeed
         stracc = str(x_speed_deriv) + "\n" + str(angle1_speed_deriv) + "\n" + str(angle2_speed_deriv) + "\n"
         print(stracc)
-        self.angle1_speed += angle1_speed_deriv * self.timestep
-        self.angle2_speed += angle2_speed_deriv * self.timestep
-        self.x_speed += x_speed_deriv * self.timestep
+        #self.angle1_speed += angle1_speed_deriv * self.timestep
+        #self.angle2_speed += angle2_speed_deriv * self.timestep
+        #self.x_speed += x_speed_deriv * self.timestep
         angle1_deriv = self.angle1_deriv(self.angle1_speed)
         angle2_deriv = self.angle2_deriv(self.angle2_speed)
         x_deriv = self.x_deriv(self.x_speed)
-        self.angle1 += angle1_deriv * self.timestep
-        self.angle2 += angle2_deriv * self.timestep
-        self.x += x_deriv * self.timestep
+        #self.angle1 += angle1_deriv * self.timestep
+        #self.angle2 += angle2_deriv * self.timestep
+        #self.x += x_deriv * self.timestep
 
 
     def doStep(self, control_input = np.array([[0]])): #control input is a scalar
