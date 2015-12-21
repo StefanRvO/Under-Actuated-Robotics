@@ -48,7 +48,8 @@ class DrawDoublePendulumOnCart:
 
     #animation function
     def animate(self, i):
-        self.SimStep()
+        for i in range(self.frameskip):
+            self.SimStep()
         self.cart.set_xy((self.P.x - 0.5,-0.25))
         self.rod1.set_data([self.P.x, self.P.x + np.sin(self.P.angle1) * self.P.L1], [0, np.cos(self.P.angle1) * self.P.L1])
         self.rod1_dot.center = (self.P.x, 0)
@@ -61,6 +62,7 @@ class DrawDoublePendulumOnCart:
         return  self.cart, self.rod1, self.rod2, self.rod1_dot, self.rod2_dot, self.tracks, self.end_dot
 
     def SimStep(self):
+
         self.G.recordDataPoint(self.lastout)
         control = self.C.calcControlSignal(self.lastout)
         self.lastout = self.P.doStep(control)

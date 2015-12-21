@@ -110,7 +110,6 @@ class DoublePendulumOnCart:
             (self.h2 * self.h6 * sin(angle1) - self.h3 * self.h5 * cos(angle2) * sin(angle1 - angle2)) * (angle1_speed ** 2) + \
             self.h3 * sin(angle2) * (-self.h8 * cos(angle2) + self.h6 * (angle2_speed ** 2) )
 
-
         num2 = num2_1 * num2_2
         #print(num2)
         num = num1 - num2
@@ -118,10 +117,6 @@ class DoublePendulumOnCart:
         (self.h1 * self.h4 * self.h6 - (self.h2 ** 2) * self.h6 * (cos(angle1) ** 2 ) - self.h1 * (self.h5 ** 2) * (cos(angle1 - angle2) ** 2) + \
         2 * self.h2 * self.h3 * self.h5 * cos(angle1) * cos(angle1 - angle2) * cos(angle2) - (self.h3 ** 2) * self.h4 * (cos(angle2) ** 2))
 
-        #print(num)
-        #print(denom)
-        #print(num /denom)
-        #print()
         return -num / denom
 
     def Runge_Kutta(self, control_input): #Computation of runge kutta. Need to implement some kind of general method when it become to troublesome this way

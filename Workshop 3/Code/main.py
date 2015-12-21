@@ -14,11 +14,11 @@ def __main__():
 
     C = SimplePendulumController(P, K_LQR = np.array([ [200, 30] ]),K_SU = 3000, \
          setpoint = np.array([[np.radians(180)], [0]]), \
-	 outmax = 0, outmin = -0, SwingupLimit = radians(1))
+	 outmax = 1, outmin = -1, SwingupLimit = radians(1))
 
     G = StatePlotter(timestep = time)
     Plotter = DrawPendulum(P, C, G, frameskip = 4)
     Plotter.startAnimation(speedup = 0.5)
     G.plotData("state.png", "phase.png")
-    
+
 __main__()
