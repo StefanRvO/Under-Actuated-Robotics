@@ -66,7 +66,7 @@ class DrawDoublePendulumOnCart:
         self.G.recordDataPoint(self.lastout)
         control = self.C.calcControlSignal(self.lastout)
         self.lastout = self.P.doStep(control)
-        #self.G.recordControlSignal(control)
+        self.G.recordControlSignal(control)
 
     #begin the animation
     def startAnimation(self, speedup = 1, runtime = None, filename = None):

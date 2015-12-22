@@ -18,7 +18,7 @@ class PendulumOnCartController:
         self.x_d = setpoint
         self.last_reward = 0
         self.pos_rew_times = 0
-        self.weights = np.array([[0.],[.0], [.0], [.0]])
+        self.weights = np.array([[0.85770962],[0.50614361], [0.36952404], [0.31212509]])
         self.times = 0
         self.outkooeficient = outkooeficient
 
@@ -61,16 +61,16 @@ class PendulumOnCartController:
         if(q > 0):
                 for i in range(4):
                         self.weights[i][0] += 0.03 * abs(x_scaled[i][0]) * q
-                print(self.weights, end ="\n\n")
-                print(x, end = "\n\n\n\n")
+                #print(self.weights, end ="\n\n")
+                #print(x, end = "\n\n\n\n")
         return zigmoid(output)
 
 
     def Learn(self, x):
         self.times += 1
         if(self.times > 20 / self.P.timestep):
-            print("success " + str(self.times))
-            print(x)
+            #print("success " + str(self.times))
+            #print(x)
             self.P.reset()
             self.times = 0
             return np.array([[0]])
@@ -81,6 +81,7 @@ class PendulumOnCartController:
             self.pos_rew_times = 0
             self.times = 0
             self.P.reset()
+            print(self.weights)
             return np.array([[0]])
 
         return u
