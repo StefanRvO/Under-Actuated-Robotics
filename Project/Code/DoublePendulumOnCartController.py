@@ -24,7 +24,7 @@ class DoublePendulumOnCartController:
         self.x_d = setpoint
         self.times = 0
         self.K_LQR = K_LQR
-
+        self.state = ""
         self.M2 = self.P.m1 * self.P.l1 + self.P.m2 * self.P.L1
         self.M1 = self.P.m2 * self.P.l2 * self.P.L1
         self.M3 = self.P.m2 * self.P.l2
@@ -34,10 +34,10 @@ class DoublePendulumOnCartController:
         self.A2  = np.array([ [0., 1., 0., 0.], [self.M2 * self.P.g / self.Itheta, 0.,0.,0.], [0.,0.,0.,1.], [0.,0.,0.,0.]])
         self.B2 = np.array([[0.],[-self.M2/self.Itheta], [0.], [1.]])
         self.Q2 = np.zeros((4,4))
-        self.Q2[0][0] = 1.
-        self.Q2[1][1] = 1.
-        self.Q2[2][2] = 1.
-        self.Q2[3][3] = 1.
+        self.Q2[0][0] = 70000.
+        self.Q2[1][1] = 70000.
+        self.Q2[2][2] = 0.000001
+        self.Q2[3][3] = 0.000001
         self.R2 = np.array([[1.]])
         self.S2 = self.getS2()
 
@@ -128,6 +128,7 @@ class DoublePendulumOnCartController:
 
     def TopController(self, x, setpoint):
         print("P1P2 TOP")
+        self.state = "TOP"
         U =  -np.dot(self.K_LQR, (x - setpoint))[0][0]
         return U * 10
 
@@ -154,7 +155,14 @@ class DoublePendulumOnCartController:
         EP += self.P.h8 * cos(x[4][0])
         return EP
     def P1Top(self, x, setpoint):
+        print("P1TOP")
+        print("A1:" + str(np.degrees(x[2][0])))
+        print("A1':" + str(x[3][0]))
+        print("A2:" + str(np.degrees(x[4][0])))
+        print("A2'':" + str(x[5][0]))
+        print()
         K2 = 1.
+        self.state = "P1TOP"
         #print("P1top")
         first = 1 / (np.dot(self.S2, self.B2))
         x2 = np.array([x[2], x[3], x[0], x[1]])
@@ -167,29 +175,21 @@ class DoublePendulumOnCartController:
         return output[0][0]
 
     def SwingUpController(self, x, setpoint):
-        K1 = 2
-        K2 = 3
-        K3 = 200
-        output = -K1 * x[0][0]
-        output += -K2 * x[1][0]
         E = self.EP(x)
         EWanted = self.EP(setpoint)
-        U_BAR = self.P.h2 * x[3][0] * cos(x[2][0]) + self.P.h3 * x[5][0] * cos(x[4][0])
-        output += K3 * (E - EWanted) * U_BAR
-        print((E - EWanted))
-        #if(cos(x[2][0]) < 0.8):
-        #    output = self.P1SwingUp(x, setpoint)
-        #else:
-        #    output = self.P2Swingup(x, setpoint)
-        if(cos(x[2][0]) > 0.8 and E - EWanted > -0.5):
-            print("Test")
+
+        if(cos(x[2][0]) > 0.8 and E - EWanted > 0 or self.state == "P1TOP"):
             output = self.P1Top(x, setpoint)
-        #if(cos(x[2][0]) > 0.9 and cos(x[4][0]) > 0.9 and abs(E - EWanted) < 0.1):
-        #    print(x)
-        #    print(abs(E - EWanted))
-        #    print("!!")
-        #    output = self.TopController(x, setpoint)
-        #print(output)
+            if(E < 0.98 * EWanted): self.state = ""
+            return output
+        K1 = 2
+        K2 = 3
+        K3 = 500
+        output = -K1 * x[0][0]
+        output += -K2 * x[1][0]
+        U_BAR = self.P.h2 * x[3][0] * cos(x[2][0]) + self.P.h3 * x[5][0] * cos(x[4][0])
+        output += K3 * (E - EWanted * 1.02) * U_BAR
+        print("EnergyControl")
         return output
 
     def getU3(self, z2, x):
@@ -231,13 +231,14 @@ class DoublePendulumOnCartController:
 
     def Controller(self, x, setpoint):
         output = 0.
-        if abs(x[2][0]) < np.radians(10) and abs(x[4][0]) < np.radians(5) and abs(x[5][0]) < 1:
+        if abs(x[2][0]) < np.radians(5) and abs(x[4][0]) < np.radians(5)  and abs(x[5][0]) < 1 or self.state == "TOP":
             output = self.TopController(x, setpoint)
         else:
             output = self.SwingUpController(x, setpoint)
         #print(self.Energy(x))
         #print(output)
         #print(x)
+        #output = self.TopController(x, setpoint)
         return np.array([[output]])
 
     def OutputLimiter(self, u):
