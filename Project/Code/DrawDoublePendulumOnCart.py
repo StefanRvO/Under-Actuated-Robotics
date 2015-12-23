@@ -14,8 +14,8 @@ class DrawDoublePendulumOnCart:
 
         #setup matplotlib stuff
         self.fig = plt.figure(num=None, figsize=(8, 7), dpi=80, facecolor='w', edgecolor='k')
-        self.ax = plt.axes( xlim =( -(self.P.L1 + self.P.L2) * 3, (self.P.L1 + self.P.L2) * 3), \
-                            ylim =(-(self.P.L1 + self.P.L2) * 3, (self.P.L1 + self.P.L2) * 3))
+        self.ax = plt.axes( xlim =( -(self.P.L1 + self.P.L2) * 5, (self.P.L1 + self.P.L2) * 5), \
+                            ylim =(-(self.P.L1 + self.P.L2) * 5, (self.P.L1 + self.P.L2) * 5))
         self.rod1, = self.ax.plot([], [], 'o-', lw=2)
         self.rod2, = self.ax.plot([], [], 'o-', lw=2)
         self.rod1_dot = plt.Circle((self.P.L1 * 10000, self.P.L1 * 10000), 0.075, fc='g') #create Off-screen, as we need to initialize for blitting
