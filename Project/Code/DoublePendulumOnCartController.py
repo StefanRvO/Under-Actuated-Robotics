@@ -31,8 +31,14 @@ class DoublePendulumOnCartController:
         self.I1 = self.P.J1 + self.P.m2 * self.P.L1 ** 2
         self.I2 = self.P.J2
         self.Itheta = self.P.J1 + self.P.m2 * self.P.L1 ** 2
-        self.A2  = np.array([ [0., 1., 0., 0.], [self.M2 * self.P.g / self.Itheta, 0.,0.,0.], [0.,0.,0.,1.], [0.,0.,0.,0.]])
-        self.B2 = np.array([[0.],[-self.M2/self.Itheta], [0.], [1.]])
+        self.A2  = np.array([ [0., 1., 0., 0.],
+                            [0, 0.,self.P.h2 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.],
+                            [0.,0.,0.,1.],
+                            [0.,0.,self.P.h1 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.]])
+        self.B2 = np.array([[0.],
+                            [self.P.h4 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4)],
+                            [0.],
+                            [self.P.h2 / (self.P.h2 ** 2 + self.P.h1 * self.P.h4)]])
         self.Q2 = np.zeros((4,4))
         self.Q2[0][0] = 700.
         self.Q2[1][1] = 700.
@@ -126,7 +132,7 @@ class DoublePendulumOnCartController:
         self.state = "P1TOP"
         #print("P1top")
         first = 1 / (np.dot(self.S2, self.B2))
-        x2 = np.array([x[2], x[3], x[0], x[1]])
+        x2 = np.array([x[0], x[1], x[2], x[3]])
         sigma2 = np.dot(self.S2, x2)
         second = np.dot(self.S2, self.A2)
         second = np.dot(second, x2) + self.R2 * np.sign(sigma2) + K2 * sigma2
@@ -177,7 +183,7 @@ class DoublePendulumOnCartController:
 
         return M22_BAR[0][0] * u + N2_BAR[0][0]
     def P2Swingup(self, x, setpoint):
-        output = self.P1Top(x, setpoint) * 20
+        output = self.P1Top(x, setpoint) * 1
         #K = 0.1
         #EP2 = self.P2SimpleEnergy(x[4][0], x[5][0])
         #print(EP2)
@@ -202,6 +208,7 @@ class DoublePendulumOnCartController:
             if(x[2][0] > np.radians(15) or abs(x[4][0]) > np.radians(15)): self.state = ""
         else:
             output = self.SwingUpController(x, setpoint)
+        self.P.x = 0
         #print(self.Energy(x))
         #print(output)
         #print(x)
