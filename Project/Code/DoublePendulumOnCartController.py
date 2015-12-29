@@ -32,18 +32,18 @@ class DoublePendulumOnCartController:
         self.I2 = self.P.J2
         self.Itheta = self.P.J1 + self.P.m2 * self.P.L1 ** 2
         self.A2  = np.array([ [0., 1., 0., 0.],
-                            [0, 0.,self.P.h2 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.],
+                            [0, 0.,- self.P.h2 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.],
                             [0.,0.,0.,1.],
                             [0.,0.,self.P.h1 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.]])
         self.B2 = np.array([[0.],
                             [self.P.h4 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4)],
                             [0.],
-                            [self.P.h2 / (self.P.h2 ** 2 + self.P.h1 * self.P.h4)]])
+                            [- self.P.h2 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4)]])
         self.Q2 = np.zeros((4,4))
-        self.Q2[0][0] = 700.
-        self.Q2[1][1] = 700.
-        self.Q2[2][2] = 50
-        self.Q2[3][3] = 50
+        self.Q2[0][0] = 5.
+        self.Q2[1][1] = 5.
+        self.Q2[2][2] = 70
+        self.Q2[3][3] = 70
         self.R2 = np.array([[1.]])
         self.S2 = self.getS2()
 
@@ -138,7 +138,7 @@ class DoublePendulumOnCartController:
         second = np.dot(second, x2) + self.R2 * np.sign(sigma2) + K2 * sigma2
         output = -first * second
         #print(output)
-
+        print(output[0][0])
         return output[0][0]
 
     def SwingUpController(self, x, setpoint):
@@ -183,7 +183,7 @@ class DoublePendulumOnCartController:
 
         return M22_BAR[0][0] * u + N2_BAR[0][0]
     def P2Swingup(self, x, setpoint):
-        output = self.P1Top(x, setpoint) * 1
+        output = self.P1Top(x, setpoint) * 10
         #K = 0.1
         #EP2 = self.P2SimpleEnergy(x[4][0], x[5][0])
         #print(EP2)

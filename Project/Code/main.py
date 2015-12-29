@@ -14,7 +14,7 @@ def __main__():
                              m2 = 0.15, \
                              L1 = 1,   \
                              L2 = 1,   \
-                             init_angle1 = -radians(180),  \
+                             init_angle1 = -radians(181),  \
                              init_angle2 = radians(181), \
                              timestep = time,  \
                              init_angle1_speed = 0, \
