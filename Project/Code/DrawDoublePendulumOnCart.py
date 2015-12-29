@@ -76,7 +76,7 @@ class DrawDoublePendulumOnCart:
             number_of_frames = int(number_of_steps / self.frameskip)
             anim = animation.FuncAnimation(self.fig, self.animate, init_func = self.init, frames = number_of_frames, interval = (1000. * self.P.timestep) / speedup, blit=True, repeat = False)
             if not filename is None: #If filename is given, save animation as file
-                anim.save(filename, fps = 60)
+                anim.save(filename, fps = int( (1./self.P.timestep) / self.frameskip))
             else:
                 plt.show()
         else:    #If no runtime restriction, run until window is closed

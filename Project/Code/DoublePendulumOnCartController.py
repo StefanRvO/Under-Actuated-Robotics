@@ -22,19 +22,13 @@ class DoublePendulumOnCartController:
         self.outmin = outmin
         self.P = Plant
         self.x_d = setpoint
-        self.times = 0
         self.K_LQR = K_LQR
         self.state = ""
-        self.M2 = self.P.m1 * self.P.l1 + self.P.m2 * self.P.L1
-        self.M1 = self.P.m2 * self.P.l2 * self.P.L1
-        self.M3 = self.P.m2 * self.P.l2
-        self.I1 = self.P.J1 + self.P.m2 * self.P.L1 ** 2
-        self.I2 = self.P.J2
-        self.Itheta = self.P.J1 + self.P.m2 * self.P.L1 ** 2
-        self.A2  = np.array([ [0., 1., 0., 0.],
+        self.A2  = np.array([[0., 1., 0., 0.],
                             [0, 0.,- self.P.h2 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.],
                             [0.,0.,0.,1.],
                             [0.,0.,self.P.h1 * self.P.h7 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4),0.]])
+
         self.B2 = np.array([[0.],
                             [self.P.h4 / (-self.P.h2 ** 2 + self.P.h1 * self.P.h4)],
                             [0.],
@@ -47,13 +41,8 @@ class DoublePendulumOnCartController:
         self.R2 = np.array([[1.]])
         self.S2 = self.getS2()
 
-    def getG(self, x):
-        P1 = self.P.m1 * self.P.l1 * self.P1Energy(x) * x[3][0] * cos(x[2][0])
-        P2 = self.P.m2 * self.P.l2 * self.P2Energy(x) * x[5][0] * cos(x[3][0])
-        return P1 + P2
-
     def getS2(self): #Returns the solution to the riccati equation for the step 2 stabilising controller
-        P2 = scipy.linalg.solve_continuous_are(self.A2 + np.identity(4), self.B2, self.Q2, np.array([[3.]]))
+        P2 = scipy.linalg.solve_continuous_are(self.A2 + np.identity(4), self.B2, self.Q2, np.array([[1.]]))
         return np.dot(np.transpose(self.B2), P2)
 
     def P1Energy(self, state):
@@ -62,13 +51,7 @@ class DoublePendulumOnCartController:
         VP1 = self.P.m1 * self.P.g * self.P.l1 * cos(state[2][0])
         return TP1 + VP1
 
-    def P1SimpleEnergy(self, angle, speed):
-        E =1/2. * self.P.J1 * (speed ** 2) + self.P.m1 * self.P.g * self.P.l1 * (cos(angle) - 1)
-        return E
 
-    def P2SimpleEnergy(self, angle, speed):
-        E =1/2. * self.P.J2 * (speed ** 2) + self.P.m2 * self.P.g * self.P.l2 * (cos(angle) - 1)
-        return E
 
     def P2Energy(self, state):
         TP2 =  1/2. * self.P.m2 * ((state[1][0] + self.P.L1 * state[3][0] * cos(state[2][0]) + \
@@ -94,25 +77,6 @@ class DoublePendulumOnCartController:
         U =  -np.dot(self.K_LQR, (x - setpoint))[0][0]
         return U
 
-    def driveForce(self, x):
-        K1 = 1
-        K2 = 0.5
-        return -x[0][0] * K1 -x[1][0] * K2
-
-    def P1SwingUp(self, x, setpoint):
-        K = 10
-        E = self.EP(x)
-        EWanted = self.EP(setpoint)
-
-        EP1 = E-EWanted * 1.2
-        print(EP1)
-        Energy_part = K * np.sign(EP1  * x[3][0] * cos(x[2][0]))
-        Drive = self.driveForce(x)
-        if(np.sign(Energy_part) == np.sign(Drive) or abs(Energy_part) > abs(Drive)):
-            return Energy_part + Drive
-        else:
-            return Energy_part
-
     def EP(self, x):
         EP = 0.5 * self.P.h4 * x[3][0] ** 2
         EP += 0.5 * self.P.h6 * x[5][0] ** 2
@@ -123,22 +87,22 @@ class DoublePendulumOnCartController:
     def P1Top(self, x, setpoint):
         print("P1TOP")
 
-        print("A1:" + str(np.degrees(x[2][0])))
-        print("A1':" + str(x[3][0]))
-        print("A2:" + str(np.degrees(x[4][0])))
-        print("A2'':" + str(x[5][0]))
-        print()
+        #print("A1:" + str(np.degrees(x[2][0])))
+        #print("A1':" + str(x[3][0]))
+        #print("A2:" + str(np.degrees(x[4][0])))
+        #print("A2'':" + str(x[5][0]))
+        #print()
         K2 = 1.
         self.state = "P1TOP"
         #print("P1top")
-        first = 1 / (np.dot(self.S2, self.B2))
+        first = scipy.linalg.inv(np.dot(self.S2, self.B2))
         x2 = np.array([x[0], x[1], x[2], x[3]])
         sigma2 = np.dot(self.S2, x2)
         second = np.dot(self.S2, self.A2)
         second = np.dot(second, x2) + self.R2 * np.sign(sigma2) + K2 * sigma2
         output = -first * second
         #print(output)
-        print(output[0][0])
+        #print(output[0][0])
         return output[0][0]
 
     def SwingUpController(self, x, setpoint):
@@ -146,21 +110,21 @@ class DoublePendulumOnCartController:
         EWanted = self.EP(setpoint)
 
         if(cos(x[2][0]) > 0.8 and E - EWanted > 0 and E - EWanted < EWanted * 0.1  or self.state == "P1TOP"):
-            output = self.P2Swingup(x, setpoint)
+            output = self.P1Top(x, setpoint) * 8
             if(E < 0.95 * EWanted): self.state = ""
             return output
         #return self.P1SwingUp(x, setpoint)
         K1 = 1
         K2 = 1
-        K3 = 20
+        K3 = 150
         #self.P.x = 0
         output = -K1 * x[0][0]
         output += -K2 * x[1][0]
         U_BAR = self.P.h2 * x[3][0] * cos(x[2][0]) + self.P.h3 * x[5][0] * cos(x[4][0])
-        output += K3 * (E - (EWanted * 1.02)) * U_BAR
+        output += K3 * (E - (EWanted * 1.05)) * U_BAR
         #output += K3 * 1000 * U_BAR
-        #print("EnergyControl")
-        print(E-EWanted)
+        print("EnergyControl")
+        #print(E-EWanted)
         #output = 0
         output = self.FeedbackLineariser(output, x)
         #print(output)
@@ -182,33 +146,14 @@ class DoublePendulumOnCartController:
 
 
         return M22_BAR[0][0] * u + N2_BAR[0][0]
-    def P2Swingup(self, x, setpoint):
-        output = self.P1Top(x, setpoint) * 10
-        #K = 0.1
-        #EP2 = self.P2SimpleEnergy(x[4][0], x[5][0])
-        #print(EP2)
-        #E = self.EP(x)
-        #EWanted = self.EP(setpoint)
-        #EP2 = (E - EWanted)
-        #U_BAR = self.P.h2 * x[3][0] * cos(x[2][0]) + self.P.h3 * x[5][0] * cos(x[4][0])
-
-        #UZ2 = 0
-        #if(sin(x[4][0]) * x[5][0] < 0 and cos(x[4][0]) < np.pi / 6):
-        #    UZ2 = K * (E - EWanted) * U_BAR
-        #U2 = self.getU2(UZ2, x)
-
-        #print(U2)
-        #output += -U2
-        return output
-
     def Controller(self, x, setpoint):
         output = 0.
-        if abs(x[2][0]) < np.radians(5) and abs(x[4][0]) < np.radians(5)  and abs(x[5][0]) < 1.5 or self.state == "TOP":
+        if abs(x[2][0]) < np.radians(10) and abs(x[4][0]) < np.radians(10)  and abs(x[5][0]) < 1.5 or self.state == "TOP":
             output = self.TopController(x, setpoint) * 10
             if(x[2][0] > np.radians(15) or abs(x[4][0]) > np.radians(15)): self.state = ""
         else:
             output = self.SwingUpController(x, setpoint)
-        self.P.x = 0
+        #self.P.x = 0
         #print(self.Energy(x))
         #print(output)
         #print(x)
